@@ -11,12 +11,12 @@
     <!-- -->
     
     <!-- choose account -->
-    <ion-row *ngIf="account_selected" class="ion-justify-content-center">
-      <ion-row>
+    <ion-row *ngIf="account_selected" class="ion-justify-content-center account-row" >
+      <!-- <ion-row>
         <span class="choose-account">Choose account</span>
-      </ion-row>
-      <ion-row>
-        <ion-col class="center-content-x">
+      </ion-row> -->
+      <ion-row class="account-row" >
+        <ion-col class="center-content-x account-col">
           <ion-card >
             <ion-card-content>
               <ion-list class="account-list">
@@ -41,7 +41,7 @@
     <!--  -->
     
     <!-- add acount btn -->
-    <ion-row class="ion-justify-content-center">
+    <ion-row class="ion-justify-content-center ion-padding">
       <ion-col class="center-content-x">
         <ion-button class="add-act-btn" id="open-modal">
           Add Account
