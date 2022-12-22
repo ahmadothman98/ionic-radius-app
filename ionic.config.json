@@ -1,0 +1,7 @@
+{
+  "name": "OctaRadius",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

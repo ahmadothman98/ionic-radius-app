@@ -1,0 +1,117 @@
+ion-content.main-content {
+    --background: url(../../../assets/imgs/login_background2.png) no-repeat center center /cover;
+    --background-origin: padding-box;
+    background: rgb(255,255,255);
+    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(48, 168, 170, 0.075) 100%, rgba(48,167,170,0.17268914401698177) 100%);
+}
+ion-content::part(background){
+    background-size:400vw 2 00vw;
+}
+ion-grid,ion-row,ion-col{
+    width: 100%;
+}
+ion-card{
+    overflow: scroll;;
+    width: 100% !important;
+    margin: 0;
+    border-radius: 10px;
+    border: 1px solid var(--ion-color-primary);
+    background-color: #fff;
+    width: 80%;
+}
+
+ion-card-content{
+    padding:0;
+}
+
+ion-icon[name = "person"]{
+    color: #4b4b4b;
+}
+// ion-modal {
+//     --height: 90vw;
+//     --width: 90vw;
+//     --border-radius: 16px;
+//     --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+// }
+ion-modal .ion-page{
+      background-color: #000;
+      
+  
+}
+.account-list{
+    max-height: 100%;
+    overflow: scroll;
+}
+.modal-list{
+    display: flex;
+    flex-direction: column;;
+    align-items: center;
+}
+.modal-list ion-item{
+    width:90%;
+}
+.modal-list ion-item ion-label{
+    color: grey;
+}
+.account-item ion-icon{
+    color: #2E3C3C;
+}
+.account-item ion-icon:first-of-type{
+    font-size: 36px;
+}
+.login-logo{
+    width: 40%;
+}
+.server-name{
+    font-weight: bold;
+    font-size: 18px;
+    color: #2E3C3C;
+}
+.user-name{
+    font-size: 12px;
+}
+.add-act-btn{
+    --background: var(--ion-color-primary);
+    --background-activated: var(--ion-color-primary-shade);
+    // --background-focused: #10878A;
+    --border-radius: 55px;
+}
+.choose-account{
+    font-size: 12px;
+    font-weight: bold;
+}
+.modal-toolbar{
+    --background: var(--ion-color-primary-tint);
+    color: var(--ion-color-primary-contrast);
+
+}
+.modal-toolbar ion-title{
+    display: flex;
+}
+.cancel-modal{
+    // color: #6b6b6b;
+    position: absolute;
+    opacity: 0.8;
+}
+.cancel-modal ion-button{
+    font-size: 12px;
+}
+.account-list,.account-item{
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 12px;
+}
+.logo-div{
+    margin-bottom : 5vh;
+}
+.modal-content{
+    --padding-top: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.server-select::part(icon){
+    display: none;
+}

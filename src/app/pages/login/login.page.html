@@ -1,0 +1,94 @@
+<ion-content class="ion-padding main-content">
+  <ion-grid>
+
+    <!-- logo -->
+    <ion-row class=" logo-div ion-justify-content-center">
+      <ion-col class="center-content-x">
+        <ion-img class="login-logo" src='../../../assets/imgs/login_banner2.png'>
+        </ion-img>
+      </ion-col>
+    </ion-row>
+    <!-- -->
+    
+    <!-- choose account -->
+    <ion-row *ngIf="account_selected" class="ion-justify-content-center">
+      <ion-row>
+        <span class="choose-account">Choose account</span>
+      </ion-row>
+      <ion-row>
+        <ion-col class="center-content-x">
+          <ion-card >
+            <ion-card-content>
+              <ion-list class="account-list">
+                <ion-item class="account-item" *ngFor="let account of accounts; let i = index"  [lines]="lines(i)">
+                  <ion-icon  slot="start" src="../../../assets/icon/account.svg" ></ion-icon>
+                  <div>
+                    <ion-label class="server-name">
+                      {{account.servername}}
+                    </ion-label>
+                    <ion-label class="user-name">
+                      {{account.username}}
+                    </ion-label>
+                  </div>
+                  <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-row>
+    <!--  -->
+    
+    <!-- add acount btn -->
+    <ion-row class="ion-justify-content-center">
+      <ion-col class="center-content-x">
+        <ion-button class="add-act-btn" id="open-modal">
+          Add Account
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <!--  -->
+  </ion-grid>
+  <ion-modal #modal trigger="open-modal">
+    <ng-template>
+      <ion-header>
+
+        <ion-toolbar class="modal-toolbar">  
+          <ion-buttons slot="start" class="cancel-modal">
+            <ion-button (click)="modal.dismiss()">Cancel</ion-button>
+          </ion-buttons>
+          <ion-title class="ion-text-center">Add Account</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="modal-content">
+        <ion-list class="modal-list" lines="full">
+          <ion-item  modal-select="" ng-model="server_modal" options="selectables" modal-title="Select a Server">
+            <ion-icon slot="start" src="../../../assets/icon/link.svg"></ion-icon>
+            <ion-select class="server-select" interface="action-sheet" placeholder="Server List">
+              <ion-select-option *ngFor="let server of servers" value={{server.value}}>{{server.name}}</ion-select-option>
+            </ion-select>
+            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+            
+          </ion-item>
+          <ion-item>
+            
+            <ion-icon slot="start" src="../../../assets/icon/account.svg"></ion-icon>
+            <ion-input type="text" placeholder="Username" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-icon slot="start" src="../../../assets/icon/lock.svg"></ion-icon>
+            <ion-input [type]="pass_type" placeholder="Password" required ></ion-input>
+            <ion-icon (click)="toggle_password()" [name]="pass_icon" ></ion-icon>
+          </ion-item>
+          <ion-button disabled="false">
+            Add Account
+          </ion-button>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+
+
+</ion-content>
