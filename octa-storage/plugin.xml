@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="octa-permissions"
+        version="1.0.0">
+
+  <name>OctaPermissions</name>
+  <description>OctaStorage</description>
+  <license>MIT</license>
+
+  <js-module src="www/octastorage.js" name="OctaPermissions">
+    <runs/>
+    <clobbers target="OctaStorage" />
+  </js-module>
+
+  <!-- android -->
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="OctaStorage">
+        <param name="android-package" value="com.octasolutions.OctaStorage" />
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+    <source-file src="src/android/OctaStorage.java" target-dir="src/com/android/plugins"/>
+  </platform>
+
+</plugin>

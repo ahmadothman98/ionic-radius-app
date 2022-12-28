@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService} from '../auth/auth.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -8,7 +8,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HomePage implements OnInit {
   token : any;
-  constructor(private route : ActivatedRoute) { }
+  constructor(private route : ActivatedRoute, private auth : AuthService, private router : Router) { }
+
+  logout(){ 
+    this.router.navigate(['/login'], {replaceUrl: true});
+    this.auth.logout();
+  }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
