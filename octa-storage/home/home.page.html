@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{subscribers_list_title}}</ion-title>
+    <ion-button slot="end" (click)="logout()">
+      LOGOUT
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row *ngFor="let user of user_list" class="subscriber-item">
+      <ion-col class="big-icon" size="auto">
+          <ion-icon [color]="user.app_subscriber_is_active == '1' && user.app_subscriber_on_grace_period  === '0' || user.app_subscriber_on_grace_period == '1' ? 'primary' : 'secondary'" [class]="user.app_subscriber_on_grace_period == '0' ? 'contact_octa' : 'grace_period_octa'"></ion-icon>
+      </ion-col>
+      <ion-col size="8" class="main-col">
+        <ion-row>
+          <ion-label>{{user.app_subscriber_name}}</ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-label>{{user.app_service_name}}</ion-label>
+        </ion-row>
+        <ion-row>
+          <ion-col size="auto">
+            <ion-icon class="cash_octa " color="primary"></ion-icon>
+            <ion-label>
+              {{data.currency_sign}}
+              {{user.app_subscriber_balance_val}}
+            </ion-label>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-icon class="timer_octa " color="primary"></ion-icon>
+            <ion-label>
+              {{user.app_subscriber_remain_day_mask}}
+            </ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+
+      <ion-col class="big-icon" size="auto">
+        <ion-icon class="big-icon online_octa" [color]=" user.app_subscriber_is_online == '1' ? 'primary' : 'tertiary' "></ion-icon>
+      </ion-col>
+      <ion-col class="big-icon" size="auto">
+        <ion-icon class="big-icon forward_arrow_octa"></ion-icon>
+      </ion-col>       
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

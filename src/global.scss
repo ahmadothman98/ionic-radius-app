@@ -29,3 +29,93 @@
     display: flex;
     justify-content: center;
 }
+ion-icon {
+    &[class*="_octa"] {
+        mask-size: contain;
+        mask-position: 50% 50%;
+        mask-repeat: no-repeat;
+        background: currentColor;
+        width: 1em;
+        height: 1em;
+
+    }
+    //Dashboard icons
+    &[class*="all_octa"] { mask-image: url(./assets/icon/all.svg); }
+    &[class*="active_octa"] { mask-image: url(./assets/icon/active.svg); }
+    &[class*="disabled_octa"] { mask-image: url(./assets/icon/disabled.svg); }
+    &[class*="expired_octa"] { mask-image: url(./assets/icon/expired.svg); }
+    &[class*="archived_octa"] { mask-image: url(./assets/icon/archived.svg); }
+    &[class*="infected_octa"] { mask-image: url(./assets/icon/infected.svg); }
+    &[class*="online_octa"] { mask-image: url(./assets/icon/online.svg); }
+    &[class*="offline_octa"] { mask-image: url(./assets/icon/offline.svg); }
+    &[class*="grace_period_octa"] { mask-image: url(./assets/icon/grace_period.svg); }
+
+    //User list icons
+    &[class*="cash_octa"] { mask-image: url(./assets/icon/cash.svg); }
+    &[class*="timer_octa"] { mask-image: url(./assets/icon/timer.svg); }
+    &[class*="contact_octa"] { mask-image: url(./assets/icon/contact.svg); }
+    &[class*="forward_arrow_octa"] { mask-image: url(./assets/icon/forward_arrow.svg); }
+    &[class*="back_arrow_octa"] { mask-image: url(./assets/icon/back_arrow.svg); }
+    &[class*="plus_octa"] { mask-image: url(./assets/icon/plus.svg); }
+    &[class*="dealer_octa"] { mask-image: url(./assets/icon/dealer.svg); }
+    
+    //Menu icons
+    &[class*="dashboard_octa"] { mask-image: url(./assets/icon/dashboard.svg); }
+    &[class*="dashboard2_octa"] { mask-image: url(./assets/icon/dashboard2.svg); }
+    &[class*="statement_octa"] { mask-image: url(./assets/icon/statement.svg); }
+    &[class*="services_octa"] { mask-image: url(./assets/icon/services.svg); }
+    &[class*="collector_summary_octa"] { mask-image: url(./assets/icon/collector_summary.svg); }
+    &[class*="category_view_octa"] { mask-image: url(./assets/icon/category_view.svg); }
+    &[class*="logout_octa"] { mask-image: url(./assets/icon/logout.svg); }
+    &[class*="wallet_octa"] { mask-image: url(./assets/icon/wallet.svg); }
+    &[class*="tickets_octa"] { mask-image: url(./assets/icon/tickets.svg); }
+    &[class*="edit_region_octa"] { mask-image: url(./assets/icon/edit_region.svg); }
+    &[class*="dealers_octa"] { mask-image: url(./assets/icon/dealers.svg); }
+    &[class*="bell_off_octa"] { mask-image: url(./assets/icon/bell_off.svg); }
+    &[class*="bell_on_octa"] { mask-image: url(./assets/icon/bell_on.svg); }
+    &[class*="sync_octa"] { mask-image: url(./assets/icon/sync.svg); }
+    &[class*="counter_octa"] { mask-image: url(./assets/icon/counter.svg); }
+    &[class*="region_filter_on_octa"] { mask-image: url(./assets/icon/domain.svg); }
+    &[class*="region_filter_off_octa"] { mask-image: url(./assets/icon/domain_off.svg); }
+    &[class*="recharge_octa"] { mask-image: url(./assets/icon/recharge.svg); }
+    &[class*="edit_list_off_octa"] { mask-image: url(./assets/icon/edit_list_off.svg); }
+    &[class*="edit_list_on_octa"] { mask-image: url(./assets/icon/edit_list_on.svg); }
+    
+    //Manage subs + Details
+    &[class*="close_octa"] { mask-image: url(./assets/icon/close.svg); }
+    &[class*="active_person_octa"] { mask-image: url(./assets/icon/person.svg); }
+    &[class*="refresh_octa"] { mask-image: url(./assets/icon/refresh.svg); }
+    &[class*="search_octa"] { mask-image: url(./assets/icon/search.svg); }
+    &[class*="edit_octa"] { mask-image: url(./assets/icon/edit.svg); }
+
+    //consumption
+    &[class*="upload_octa"] { mask-image: url(./assets/icon/upload.svg); }
+    &[class*="download_octa"] { mask-image: url(./assets/icon/download.svg); }
+    &[class*="combined_octa"] { mask-image: url(./assets/icon/combined.svg); }
+
+    //Others
+    &[class*="print_octa"] { mask-image: url(./assets/icon/print.svg); }
+    // &[class*="config_printer_octa"] { mask-image: url(./assets/icon/config_printer.svg); }
+    &[class*="send_octa"] { mask-image: url(./assets/icon/send.svg); }
+    &[class*="check_octa"] { mask-image: url(./assets/icon/check.svg); }
+    &[class*="num_list_octa"] { mask-image: url(./assets/icon/num_list.svg); }
+    &[class*="crd_card_octa"] { mask-image: url(./assets/icon/crd_card.svg); }
+    &[class*="camera_octa"] { mask-image: url(./assets/icon/camera.svg); }
+    &[class*="down_arrow_octa"] { mask-image: url(./assets/icon/down_arrow.svg); }
+    &[class*="calendar_octa"] { mask-image: url(./assets/icon/calendar.svg); }
+    &[class*="cancel_octa"] { mask-image: url(./assets/icon/cancel.svg); }
+    &[class*="check_circle_octa"] { mask-image: url(./assets/icon/check_circle.svg); }
+    &[class*="location_octa"] { mask-image: url(./assets/icon/location.svg); }
+    &[class*="location_off_octa"] { mask-image: url(./assets/icon/location_off.svg); }
+    &[class*="copy_octa"] { mask-image: url(./assets/icon/copy.svg); }
+    &[class*="shuffle_octa"] { mask-image: url(./assets/icon/shuffle.svg); }
+    &[class*="ping_octa"] { mask-image: url(./assets/icon/ping.svg); }
+    &[class*="maintainer_octa"] { mask-image: url(./assets/icon/maintainer.svg); }
+    &[class*="account_octa"] { mask-image: url(./assets/icon/account.svg); }
+    &[class*="eye_octa"] { mask-image: url(./assets/icon/eye.svg); }
+    &[class*="eye_off_octa"] { mask-image: url(./assets/icon/eye_off.svg); }
+    &[class*="link_octa"] { mask-image: url(./assets/icon/link.svg); }
+    &[class*="lock_octa"] { mask-image: url(./assets/icon/lock.svg); }
+    &[class*="lang_ar_octa"] { mask-image: url(./assets/icon/lang_ar.svg); }
+    &[class*="lang_en_octa"] { mask-image: url(./assets/icon/lang_en.svg); }
+}

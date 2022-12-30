@@ -34,7 +34,10 @@ ion-icon[name = "person"]{
 //     --width: 90vw;
 //     --border-radius: 16px;
 //     --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-// }
+//
+.cancel-button{
+    --color: var(--ion-color-primary-contrast) !important;
+}
 ion-modal .ion-page{
     background-color: #000;
 }

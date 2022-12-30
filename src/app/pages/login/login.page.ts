@@ -6,6 +6,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 import { OctaPersistentStorage } from 'src/octastorage';
 import { HttpClient, HttpHeaders, HttpParamsOptions } from '@angular/common/http';
 import { CapacitorHttp, HttpResponse } from '@capacitor/core';
+import { UtilitiesService } from 'src/app/services/utilities.service';
 
 @Component({
   selector: 'app-login',
@@ -22,14 +23,12 @@ export class LoginPage implements OnInit {
       },
     },
   };
-  account_selected = 'true';
   pass_type = 'password';
   pass_icon = "eye-off";
   username : string = '';
   selected_server : any;
   server_index : number = -1 ;
   password  : string = '';
-  token : any;
   user : any;
   headers :any;
   res : any;
@@ -50,7 +49,7 @@ export class LoginPage implements OnInit {
   app_version: any;
   pref_lang: any;
   last_server: any;
-  constructor(private router: Router, private alertController : AlertController, private http : HttpClient) {}
+  constructor(private router: Router, private alertController : AlertController, private http : HttpClient, private utilites: UtilitiesService    ) {}
 
 
   //methods
@@ -65,22 +64,23 @@ export class LoginPage implements OnInit {
   }
  
 
-  async login(data : any){
+  async login(index : any){
 
-    this.initLoginData(data);
+    this.initLoginData(index);
 
       const options = {
         url: this.login_api,
         headers: this.headers,
         data: this.login_data,
       };
-      const response: HttpResponse = await CapacitorHttp.post(options);
+      const response: HttpResponse = await CapacitorHttp.post(options)
       let status = response.status;
       let mystatus = response.data.myStatus;
+      
       if(status === 401 && mystatus === "Unauthorized"){
         const alert = await this.alertController.create(
           {
-            header: 'Incorrect username or password!',
+            header: response.data.msg,
             buttons: [
               {
                 text: 'OK',
@@ -94,45 +94,49 @@ export class LoginPage implements OnInit {
       }
       else if(status === 200 && mystatus === "Ok"){
         this.responseData = response.data;
-        this.storage.set('jwt', response.headers['Authorization']);
-        // this.storage.set('subs', null);
+        Object.assign(this.responseData,{'jwt': response.headers['authorization']});
+        Object.assign(this.responseData,{'user_account': this.user});
+        console.log(this.responseData );
+        // let response_data =
+      //   {
+      //   'jwt': response.headers['authorization'],
+      //   // 'subs': null,
 
-        this.storage.set('dealer_id', this.responseData.app_dealer_id);
-        this.storage.set('collector_id', this.responseData.app_collector_id);
-        this.storage.set('maintainer_id', this.responseData.app_maintainer_id);
-        this.storage.set('group_id', this.responseData.group_id);
-        this.storage.set('user_id', this.responseData.user_id);
-        this.storage.set('is_account', this.responseData.is_account);
-        this.storage.set('is_map', this.responseData.is_map);
-        this.storage.set('invoice_gen', this.responseData.invoice_gen);
-        this.storage.set('group_privilege', this.responseData.group_privilege);
-        this.storage.set('privilages_form', this.responseData.privilages_form);
-        this.storage.set('financial_forms', this.responseData.financial_forms);
-        // this.storage.set('username', account.username);
-        // this.storage.set('app_version', this.app_version);
-        this.storage.set('is_gps', this.responseData.is_gps);
-        // this.storage.set('pref_lang', this.pref_lang);
-        this.storage.set('currency_id', this.responseData.app_currency_id);
-        this.storage.set('currency_rate', this.responseData.app_currency_rate);
-        this.storage.set('currency_sign', this.responseData.currency_sign);
-        this.storage.set('has_sub', this.responseData.has_sub);
-        this.storage.set('is_root', this.responseData.is_root);
-        this.storage.set('visit_type', this.responseData.visit_type);
+      //   'dealer_id': this.responseData.app_dealer_id,
+      //   'collector_id': this.responseData.app_collector_id,
+      //   'maintainer_id': this.responseData.app_maintainer_id,
+      //   'group_id': this.responseData.group_id,
+      //   'user_id': this.responseData.user_id,
+      //   'is_account': this.responseData.is_account,
+      //   'is_map': this.responseData.is_map,
+      //   'invoice_gen': this.responseData.invoice_gen,
+      //   'group_privilege': this.responseData.group_privilege,
+      //   'privilages_form': this.responseData.privilages_form,
+      //   'financial_forms': this.responseData.financial_forms,
+      //   // 'user_index': this.index,
+      //   // 'app_version': this.app_version,
+      //   'is_gps': this.responseData.is_gps,
+      //   // 'pref_lang': this.pref_lang,
+      //   'currency_id': this.responseData.app_currency_id,
+      //   'currency_rate': this.responseData.app_currency_rate,
+      //   'currency_sign': this.responseData.currency_sign,
+      //   'has_sub': this.responseData.has_sub,
+      //   'is_root': this.responseData.is_root,
 
-        // this.storage.set('firstLoad', true);
-        // this.storage.set('need_refresh', false);
-        // this.storage.set('condition', null);
-
-        // this.storage.set("last_server", this.last_server);
-        this.router.navigate(['/home'], {replaceUrl: true});
+      //   'visit_type': this.responseData.visit_type,
+      //   // 'firstLoad': true,
+      //   // 'need_refresh': false,
+      //   // 'condition': null,
+      //   // "last_server": this.last_server,
+      // }        
+      // this.storage.set('user_account': this.user,
+      this.storage.set("data", this.responseData).then(()=>{
+        console.log(response.headers);
         
-      }
-    
-  //   this.http.post(this.login_api, this.apiData, this.headers).subscribe((res) => {
-  //     this.router.navigate(['/home']);
-  //   })
-
+        this.router.navigate(['/main-view'], {replaceUrl: true});
+      })
     }
+  }
 
   //
   //
@@ -169,6 +173,8 @@ export class LoginPage implements OnInit {
       }
     }
   }
+
+  //
   async removeAccount(index: number, account_slide_item : any){
     const alert = await this.alertController.create(
       {
@@ -234,8 +240,8 @@ export class LoginPage implements OnInit {
 
   }
   //@ts-ignore
-  initLoginData(data){
-    this.user = this.accounts[data.index];
+  initLoginData(index){
+    this.user = this.accounts[index];
     this.login_api = this.user.server_link + '/api/login.php';
     this.login_data = {
       username : this.user.username,
@@ -256,14 +262,7 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    this.headers ={
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST',
-      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-      'Authorization': '',
-        };
+    this.headers = this.utilites.getHeaders();
 
     this.initServerList();
     this.storage.get('accounts').then((accounts)=>{
