@@ -1,9 +1,23 @@
 import { Injectable } from '@angular/core';
+import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UtilitiesService {
+export class ApiService {
+
+  async post(url: string , headers : any, data? : any){
+    const options = {
+      url: url,
+      headers: headers,
+      data: data,
+    };
+    const response: HttpResponse = await CapacitorHttp.post(options);
+
+    return response;
+
+  }
+
   getHeaders(auth: string = ''){
     let headers ={
       'Accept': 'application/json',
@@ -16,6 +30,4 @@ export class UtilitiesService {
         return headers;
   }
   constructor() { }
-
-
 }

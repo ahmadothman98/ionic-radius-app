@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CapacitorHttp, HttpResponse } from '@capacitor/core';
-import { stringify } from 'querystring';
-import { OctaPersistentStorage } from 'src/octastorage';
+import { StorageService } from 'src/app/services/storage/storage.service';
 import { AuthService} from '../../auth/auth.service';
-import { UtilitiesService } from '../../services/utilities.service';
+import { ApiService } from '../../services/api/api.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-main-view',
@@ -13,14 +12,14 @@ import { UtilitiesService } from '../../services/utilities.service';
 })
 export class MainViewPage implements OnInit {
   token : any; user : any;
-  storage =  new OctaPersistentStorage('Documents/octastorage');
   data: any;
   selected : string = "ALL"
   selected_condition: string = "all";
   page_no: number = 0;
   user_list: any;
   subscribers_list_title : string = "Subscribers List";
-
+  loading : any;
+  headers : any;
   condition_list = [
     { title: 'ALL', condition: 'all', totals: '', icon: 'all_octa' },
     { title: 'ONLINE', condition: 'online', totals: '', icon: 'online_octa' },
@@ -33,23 +32,29 @@ export class MainViewPage implements OnInit {
     { title: 'GRACE PERIOD', condition: 'grace_period', totals: '', icon: 'grace_period_octa' }
   ];
 
-  constructor(private route : ActivatedRoute, private auth : AuthService, private router : Router, private utilites : UtilitiesService) { }
+  constructor(private route : ActivatedRoute, private auth : AuthService, private router : Router, private apiService : ApiService, private loadingCtrl: LoadingController, private storage : StorageService) {
+
+   }
 
   logout(){ 
     this.router.navigate(['/login'], {replaceUrl: true});
     this.auth.logout();
+    // this.storage.clear();
   }
 
-  initData(){
-    this.storage.get('data').then((data)=>{
-      this.data = data;
+  async initData(){
+    await this.storage.get('data').then((data)=>{
+      this.data = data; 
+      this.headers = this.apiService.getHeaders(data.jwt)}).then(()=>{
       this.getUsers();
       this.get_conditions();
-      
     })
+    return this.data;
   }
   async getUsers(){
     
+    let url = this.data.user_account.server_link + '/api/get_users.php';
+
     let apiData = {    
     "app_dealer_id": this.data.app_dealer_id,
     "user_id": this.data.user_id,
@@ -57,31 +62,20 @@ export class MainViewPage implements OnInit {
     "app_currency_rate": this.data.app_currency_rate,
     "condition": this.selected_condition,
     "page_no": this.page_no
-}
+    }
 
-    const options = {
-      url: this.data.user_account.server_link + '/api/get_users.php',
-      headers: this.utilites.getHeaders(this.data.jwt),
-      data: apiData,
-    };
-    
-    const response: HttpResponse = await CapacitorHttp.post(options);
+    const response =  await this.apiService.post(url,this.headers,apiData);
     this.user_list = JSON.parse(response.data).subscriber;
 
   }
 
 async get_conditions(){
+  let url =this.data.user_account.server_link + '/api/app_dealer_counters.php';
   let apiData = {
     "app_dealer_id": this.data.app_dealer_id,
     "user_id": this.data.user_id,
   }
-  
-  const options = {
-    url: this.data.user_account.server_link + '/api/app_dealer_counters.php',
-    headers: this.utilites.getHeaders(this.data.jwt),
-    data: apiData,
-  };
-  const response: HttpResponse = await CapacitorHttp.post(options);
+  const response =  await this.apiService.post(url,this.headers,apiData);
   
   let data = JSON.parse(response.data);
   this.condition_list[0].totals = data.total_subs;
@@ -97,23 +91,46 @@ async get_conditions(){
 }
 
 change_condition(condition : {title:string; condition: string; totals: string; icon: string;}){
+  this.user_list = [];
   this.selected_condition = condition.condition;
-  this.getUsers()
+  this.start_loading().then(() => {
+    this.getUsers().then(()=>{
+      this.stop_loading();
+    });
+  });
   
-}  //
+}
+
+async start_loading(){
+  this.loading = await this.loadingCtrl.create({
+    message: 'Getting Data',
+  });
+  this.loading.present();
+}
+async stop_loading(){
+  this.loading.dismiss();
+}
+
+
+  //
   //
   ngOnInit() {
-    this.route.params.subscribe(params => {
-    this.token = params['token'];
-    
-    // const response: HttpResponse = await CapacitorHttp.post(options)
-  })
-  this.initData();
+    this.start_loading().then(() =>{
+      this.initData().then((data)=>{
+        this.stop_loading();
+      });
+    });
 
-  // console.log(this.user);
+    this.route.params.subscribe(params => {
+      this.token = params['token'];
+      })
+  
+
 
    
   }
 
 
 }
+
+

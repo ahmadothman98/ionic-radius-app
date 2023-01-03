@@ -3,10 +3,8 @@ import { Router } from '@angular/router';
 import { StatusBar , Style} from '@capacitor/status-bar';
 import { AlertController } from '@ionic/angular';
 import { CapacitorConfig } from '@capacitor/cli';
-import { OctaPersistentStorage } from 'src/octastorage';
-import { HttpClient, HttpHeaders, HttpParamsOptions } from '@angular/common/http';
-import { CapacitorHttp, HttpResponse } from '@capacitor/core';
-import { UtilitiesService } from 'src/app/services/utilities.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
+import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +39,7 @@ export class LoginPage implements OnInit {
 
   modal_title : string = 'Add Account';
 
-  storage =  new OctaPersistentStorage('Documents/octastorage');
+
   role: string = 'add';
 
   edit_account_index : number = -1;
@@ -49,7 +47,7 @@ export class LoginPage implements OnInit {
   app_version: any;
   pref_lang: any;
   last_server: any;
-  constructor(private router: Router, private alertController : AlertController, private http : HttpClient, private utilites: UtilitiesService    ) {}
+  constructor(private router: Router, private alertController : AlertController, private apiService: ApiService, private storage : StorageService) {}
 
 
   //methods
@@ -68,12 +66,7 @@ export class LoginPage implements OnInit {
 
     this.initLoginData(index);
 
-      const options = {
-        url: this.login_api,
-        headers: this.headers,
-        data: this.login_data,
-      };
-      const response: HttpResponse = await CapacitorHttp.post(options)
+      const response = await this.apiService.post(this.login_api, this.headers, this.login_data)
       let status = response.status;
       let mystatus = response.data.myStatus;
       
@@ -85,7 +78,6 @@ export class LoginPage implements OnInit {
               {
                 text: 'OK',
                 role: 'cancel',
-              
               }
             ]
           }
@@ -216,17 +208,16 @@ export class LoginPage implements OnInit {
     };
   }
 
-  initServerList(){
+  async initServerList(){
     let url = 'https://octaradius.com/octaradius/api/get_server_list.php';
-    let data = {};
-    this.http.post(url, data, this.headers).subscribe((res : any) => {
-      this.servers = res.server_list;
-    })
-     
+
+    const response = await this.apiService.post(url, this.headers)
+    this.servers = JSON.parse(response.data).server_list;
+    console.log(this.servers);
   }
 
   ngOnInit() {
-    this.headers = this.utilites.getHeaders();
+    this.headers = this.apiService.getHeaders();
 
     this.initServerList();
     this.storage.get('accounts').then((accounts)=>{
