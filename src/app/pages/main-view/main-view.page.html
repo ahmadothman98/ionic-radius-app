@@ -8,19 +8,41 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ion-row *ngFor="let user of user_list" class="subscriber-item">
-      <ion-col class="big-icon" size="auto">
+  
+  <div class="outer-toolbar">
+    <div slot="top" class="condition-toolbar">
+      <div (click)="change_condition(condition)" *ngFor="let condition of condition_list" 
+            class="condition-button" 
+            [style]="selected_condition != condition.condition ? 'opacity : 0.7; color : var(--ion-color-tertiary)' : 'opacity : 1 ; color : var(--ion-color-primary)' ">
+        <div>
+          <ion-icon  class="{{condition.icon}} condition-icon" >
+          </ion-icon>
+        </div>
+        <div class="condition-title">
+          {{condition.title}}
+        </div> 
+        <div class="condition-number">
+          {{condition.totals}}
+        </div>
+        <div class="bar" [hidden]="selected_condition != condition.condition">
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <ion-grid class="users-grid">
+    <ion-row *ngFor="let user of user_list" class="subscriber">
+      <ion-col class="user-icon" size="2">
           <ion-icon [color]="user.app_subscriber_is_active == '1' && user.app_subscriber_on_grace_period  === '0' || user.app_subscriber_on_grace_period == '1' ? 'primary' : 'secondary'" [class]="user.app_subscriber_on_grace_period == '0' ? 'contact_octa' : 'grace_period_octa'"></ion-icon>
       </ion-col>
-      <ion-col size="8" class="main-col">
-        <ion-row>
-          <ion-label>{{user.app_subscriber_name}}</ion-label>
+      <ion-col size="7" class="main-col">
+        <ion-row class="subscriber-name">
+          <ion-label >{{user.app_subscriber_name}}</ion-label>
         </ion-row>
-        <ion-row>
+        <ion-row class="subscriber-info">
           <ion-label>{{user.app_service_name}}</ion-label>
         </ion-row>
-        <ion-row>
+        <ion-row class="subscriber-info cash-timer">
           <ion-col size="auto">
             <ion-icon class="cash_octa " color="primary"></ion-icon>
             <ion-label>
@@ -37,11 +59,11 @@
         </ion-row>
       </ion-col>
 
-      <ion-col class="big-icon" size="auto">
-        <ion-icon class="big-icon online_octa" [color]=" user.app_subscriber_is_online == '1' ? 'primary' : 'tertiary' "></ion-icon>
+      <ion-col class="online-icon" size="2">
+        <ion-icon class="online_octa" [color]=" user.app_subscriber_is_online == '1' ? 'primary' : 'tertiary' "></ion-icon>
       </ion-col>
-      <ion-col class="big-icon" size="auto">
-        <ion-icon class="big-icon forward_arrow_octa"></ion-icon>
+      <ion-col class="more-icon" size="2">
+        <ion-icon class=" forward_arrow_octa"></ion-icon>
       </ion-col>       
     </ion-row>
   </ion-grid>

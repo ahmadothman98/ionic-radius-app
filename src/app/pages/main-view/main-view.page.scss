@@ -1,11 +1,142 @@
-.subscriber-item{
-    display: flex;
+ion-content {
+    // overwrite inline styles
+    --offset-bottom: auto!important;
+    --overflow: hidden;
+    overflow: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+.subscriber{
+    border-bottom: 0.55px solid #cbe9eb !important;
+    flex-wrap: nowrap;
+    padding: 7px 5px;
+}
+.cash-timer{
+    flex-wrap: nowrap ;
     
 }
-.big-icon{
-    font-size: 40px;
+.user-icon{
+    font-size: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+// .contact_octa, grace_period_octa{
+//     width: 48px;
+//     height: 48px;
+// }
+.subscriber-name{
+    font-size: 18px;
+    font-family:  'Roboto','Greta-Arabic' !important;
+    color: #444;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    overflow: scroll;
+    white-space: nowrap
+}
+.subscriber-name::-webkit-scrollbar, .subscriber-info::-webkit-scrollbar, .users-grid::-webkit-scrollbar{
+    display: none !important;
 
+}
+.subscriber-info{
+    font-size: 13px;
+    font-weight: 300;
+
+    max-height: 22px;
+    text-overflow: hidden;
+    overflow: scroll;
+    white-space: nowrap;
+}
+.online-icon{
+    font-size: 26px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding:  0 !important;
+}
+.online-icon ion-icon{
+    font-size: 32px;
+
+}
+.more-icon {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 28px;
+    padding:  0 !important;
+
+    ion-icon{
+        font-size: 24px;
+
+    }
+}
+
+.outer-toolbar{
+
+    position: fixed;
+    width: 100vw;
+    overflow-x: scroll;
+    z-index: 2;
+    &::-webkit-scrollbar{
+        display: none;
+    }
+}
+.condition-toolbar{
+    height: 88px;
+    background-color: white;
+    border-bottom: 8px solid #DAEDEE ;
+    display: flex;
+    flex-direction: row !important;
+    min-width: 850px;
+   
+
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+}
+
+.condition-button{
+    background-color:white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 95px;
+    height: 80px;
+    padding: 10px 0;
+    font-size: 12px;
+    border-right: 0.5px solid #d6d6d6 ;
+    color:#999;
+    opacity: 0.7;
+    position: relative;
+}
+.condition-button div{
+    text-align: center;
+
+}
+
+.condition-icon{
+    font-size : 32px !important;
+
+}
+.condition-title{
+    font-weight: bold;
+}
+.condition-number{
+    font-weight: 300;
+    // line-height: 30px;
+}
+
+.users-grid{
+    margin-top: 88px;
+    padding: 0;
+}
+div.bar{
+    width: 100%;
+    height: 4px;
+    background-color: var(--ion-color-primary);
+    position: absolute;
+    bottom: 0;
+}

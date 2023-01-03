@@ -119,3 +119,10 @@ ion-icon {
     &[class*="lang_ar_octa"] { mask-image: url(./assets/icon/lang_ar.svg); }
     &[class*="lang_en_octa"] { mask-image: url(./assets/icon/lang_en.svg); }
 }
+@font-face {
+    font-family: 'Greta-Arabic';
+    src:  url('./assets/fonts/GretaTextArabicLight.ttf');
+   
+    font-weight: normal;
+    font-style: normal;
+  }

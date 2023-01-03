@@ -94,55 +94,19 @@ export class LoginPage implements OnInit {
       }
       else if(status === 200 && mystatus === "Ok"){
         this.responseData = response.data;
-        Object.assign(this.responseData,{'jwt': response.headers['authorization']});
+        console.log(this.responseData);
+        Object.assign(this.responseData,{'jwt': (response.headers['Authorization'] ? response.headers['Authorization'] : (response.headers['authorization'] ? response.headers['authorization'] : '' ))});
         Object.assign(this.responseData,{'user_account': this.user});
-        console.log(this.responseData );
-        // let response_data =
-      //   {
-      //   'jwt': response.headers['authorization'],
-      //   // 'subs': null,
-
-      //   'dealer_id': this.responseData.app_dealer_id,
-      //   'collector_id': this.responseData.app_collector_id,
-      //   'maintainer_id': this.responseData.app_maintainer_id,
-      //   'group_id': this.responseData.group_id,
-      //   'user_id': this.responseData.user_id,
-      //   'is_account': this.responseData.is_account,
-      //   'is_map': this.responseData.is_map,
-      //   'invoice_gen': this.responseData.invoice_gen,
-      //   'group_privilege': this.responseData.group_privilege,
-      //   'privilages_form': this.responseData.privilages_form,
-      //   'financial_forms': this.responseData.financial_forms,
-      //   // 'user_index': this.index,
-      //   // 'app_version': this.app_version,
-      //   'is_gps': this.responseData.is_gps,
-      //   // 'pref_lang': this.pref_lang,
-      //   'currency_id': this.responseData.app_currency_id,
-      //   'currency_rate': this.responseData.app_currency_rate,
-      //   'currency_sign': this.responseData.currency_sign,
-      //   'has_sub': this.responseData.has_sub,
-      //   'is_root': this.responseData.is_root,
-
-      //   'visit_type': this.responseData.visit_type,
-      //   // 'firstLoad': true,
-      //   // 'need_refresh': false,
-      //   // 'condition': null,
-      //   // "last_server": this.last_server,
-      // }        
-      // this.storage.set('user_account': this.user,
-      this.storage.set("data", this.responseData).then(()=>{
+        console.log(response );
+      
         console.log(response.headers);
+      this.storage.set("data", this.responseData).then(()=>{
         
         this.router.navigate(['/main-view'], {replaceUrl: true});
       })
     }
   }
 
-  //
-  //
-  //
-
-  // add or edit account
   submitAccount( ){ 
     this.selected_server = this.servers[this.server_index]
     if(this.selected_server && this.username && this.password){

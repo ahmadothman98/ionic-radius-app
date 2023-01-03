@@ -1,6 +1,3 @@
-2022/12/30-11:38:24.389 27ac Creating DB /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb since it was missing.
-2022/12/30-11:38:24.392 27ac Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
-2022/12/30-13:18:24.422 41e7 Level-0 table #5: started
-2022/12/30-13:18:24.423 41e7 Level-0 table #5: 8652 bytes OK
-2022/12/30-13:18:24.425 41e7 Delete type=0 #3
-2022/12/30-13:18:24.425 41e7 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2022/12/30-17:48:37.915 a206 Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
+2022/12/30-17:48:37.915 a206 Recovering log #4
+2022/12/30-17:48:37.916 a206 Reusing old log /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb/000004.log 
