@@ -1,71 +1,194 @@
 <ion-header>
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>{{subscribers_list_title}}</ion-title>
-    <ion-button slot="end" (click)="logout()">
-      LOGOUT
-    </ion-button>
+    <ion-buttons slot="end">
+      <ion-button (click)="pageChanged(0)">
+        <ion-icon class="refresh_octa"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  
+
+<ion-menu contentId="main-content" >
+  <div class="menu-content">
+    <div class="left-menu">
+      <div class="menu-logo">
+        <ion-img src='../../../assets/imgs/new_logo2.png'></ion-img>
+        <ion-label>
+          v. {{app_version}}
+        </ion-label>
+      </div>
+      <div>
+        <ion-button color="none" (click)="refresh_balance()">
+          <ion-icon color="primary" slot="icon-only" class="refresh_octa"></ion-icon>
+        </ion-button>
+        <ion-button color="none" (click)="logout()">
+          <ion-icon color="primary" slot="icon-only" class="logout_octa"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+    <div class="right-menu">
+      <ion-button  *ngFor=" let page of menu_pages" (click)="navigateToPage(page.page_name)"  fill="clear" class="menu-button">
+        <span>
+
+          <ion-icon color="primary"  [class]="page.icon"></ion-icon>
+          <ion-label >
+            {{page.title}}
+          </ion-label>
+        </span>
+      </ion-button>
+   
+    </div>
+  </div>
+  <div class="menu-footer">
+    <ion-icon class="wallet_octa"></ion-icon>
+    <ion-label>
+      LL &nbsp; {{ balance | number:'1.2-2' }}
+    </ion-label>
+  </div>
+</ion-menu>
+
+<ion-content [scrollEvents]="true" scrollY="true" #content id="main-content">
   <div class="outer-toolbar">
     <div slot="top" class="condition-toolbar">
-      <div (click)="change_condition(condition)" *ngFor="let condition of condition_list" 
-            class="condition-button" 
-            [style]="selected_condition != condition.condition ? 'opacity : 0.7; color : var(--ion-color-tertiary)' : 'opacity : 1 ; color : var(--ion-color-primary)' ">
+      <div (click)="change_condition(condition)" *ngFor="let condition of condition_list" class="condition-button"
+        [style]="selected_condition.condition != condition.condition ? 'opacity : 0.7; color : var(--ion-color-tertiary)' : 'opacity : 1 ; color : var(--ion-color-primary)' ">
         <div>
-          <ion-icon  class="{{condition.icon}} condition-icon" >
+          <ion-icon class="{{condition.icon}} condition-icon">
           </ion-icon>
         </div>
         <div class="condition-title">
           {{condition.title}}
-        </div> 
+        </div>
         <div class="condition-number">
           {{condition.totals}}
         </div>
-        <div class="bar" [hidden]="selected_condition != condition.condition">
-
+        <div class="bar" [hidden]="selected_condition.condition != condition.condition">
         </div>
       </div>
     </div>
   </div>
-  <ion-grid class="users-grid">
-    <ion-row *ngFor="let user of user_list" class="subscriber">
-      <ion-col class="user-icon" size="2">
-          <ion-icon [color]="user.app_subscriber_is_active == '1' && user.app_subscriber_on_grace_period  === '0' || user.app_subscriber_on_grace_period == '1' ? 'primary' : 'secondary'" [class]="user.app_subscriber_on_grace_period == '0' ? 'contact_octa' : 'grace_period_octa'"></ion-icon>
-      </ion-col>
-      <ion-col size="7" class="main-col">
-        <ion-row class="subscriber-name">
-          <ion-label >{{user.app_subscriber_name}}</ion-label>
-        </ion-row>
-        <ion-row class="subscriber-service">
-          <ion-label>{{user.app_service_name}}</ion-label>
-        </ion-row>
-        <ion-row class="subscriber-info">
-          <ion-col size="auto">
-            <ion-icon class="cash_octa " color="primary"></ion-icon>
-            <ion-label>
-              {{data.currency_sign}}
-              {{ data.app_currency_id == '1' ? (user.app_subscriber_balance_val | number:'1.2-2' ) : (user.app_subscriber_balance_val | number:'1.0-0' )}}
-            </ion-label>
-          </ion-col>
-          <ion-col size="auto">
-            <ion-icon class="timer_octa " color="primary"></ion-icon>
-            <ion-label>
-              {{user.app_subscriber_remain_day_mask}}
-            </ion-label>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-      
-      <ion-col class="online-icon" size="2">
-        <ion-icon class="online_octa" [color]=" user.app_subscriber_is_online == '1' ? 'primary' : 'tertiary' "></ion-icon>
-      </ion-col>
-      <ion-col class="more-icon" size="2">
-        <ion-icon class=" forward_arrow_octa"></ion-icon>
-      </ion-col>       
-    </ion-row>
-  </ion-grid>
+
+  <div class="paginator" >
+    <div>
+      <ion-button [disabled]="rendered_page_number == 0 || !loaded " (click)="pageChanged(rendered_page_number - 1)">
+        < </ion-button>
+    </div>
+
+    <div class="pages">
+      <ion-label *ngIf="(rendered_page_number >= 2 && page_change)" color="primary">...</ion-label>
+
+      <div *ngIf="(rendered_page_number == 0 ? false : true) && (loaded || page_change)">
+        <ion-button (click)="pageChanged(rendered_page_number - 1)" color="secondary">
+          {{rendered_page_number }}
+        </ion-button>
+      </div>
+
+      <div class="current-page"  >
+        <ion-button *ngIf="loaded || page_change">{{rendered_page_number + 1 }}</ion-button>
+        <div *ngIf="!loaded && !page_change" style="display: flex; gap: 20px;">
+          <p style="height: 5px; width: 5px;">
+            <ion-skeleton-text [animated]="true" style="width: 100%;" ></ion-skeleton-text>
+          </p>
+          <p style="height: 5px; width: 5px;">
+            <ion-skeleton-text [animated]="true" style="width: 100%;" ></ion-skeleton-text>
+          </p>
+          <p style="height: 5px; width: 5px;">
+            <ion-skeleton-text [animated]="true" style="width: 100%;" ></ion-skeleton-text>
+          </p>
+          <p style="height: 5px; width: 5px;">
+            <ion-skeleton-text [animated]="true" style="width: 100%;" ></ion-skeleton-text>
+          </p>
+        </div>
+  
+      </div>
+     
+      <div *ngIf="(pageExists(rendered_page_number + 1) &&  (loaded) || page_change)" >
+        <ion-button (click)="pageChanged(rendered_page_number + 1)" color="secondary">{{rendered_page_number +
+          2}}</ion-button>
+      </div>
+
+      <ion-label *ngIf="(pageExists(rendered_page_number + 2) &&  loaded) || page_change" color="primary">
+        ...
+
+      </ion-label>
+    </div>
+    <div>
+      <ion-button [disabled]="!pageExists(rendered_page_number+1) || !loaded " (click)="pageChanged(rendered_page_number + 1)">
+        >
+      </ion-button>
+    </div>
+  </div>
+
+  <div *ngIf="loaded" class="users-grid-container">
+    <ion-grid class="users-grid">
+      <ion-row *ngFor="let user of user_list; let i = index" class="subscriber ion-activatable ripple-parent" (click)="user_menu(user)">
+        <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
+        <ion-col class="user-icon" size="2">
+          <ion-icon
+            [color]="user.app_subscriber_is_active == '1' && user.app_subscriber_on_grace_period  === '0' || user.app_subscriber_on_grace_period == '1' ? 'primary' : 'secondary'"
+            [class]="user.app_subscriber_on_grace_period == '0' ? 'contact_octa' : 'grace_period_octa'"></ion-icon>
+        </ion-col>
+        <ion-col size="7" class="main-col">
+          <ion-row class="subscriber-name">
+            <ion-label>{{user.app_subscriber_name}}</ion-label>
+          </ion-row>
+          <ion-row class="subscriber-service">
+            <ion-label>{{user.app_service_name}}</ion-label>
+          </ion-row>
+          <ion-row class="subscriber-info">
+            <ion-col size="auto">
+              <ion-icon class="cash_octa " color="primary"></ion-icon>
+              <ion-label>
+                {{data.currency_sign}}
+                {{ data.app_currency_id == '1' ? (user.app_subscriber_balance_val | number:'1.2-2' ) :
+                (user.app_subscriber_balance_val | number:'1.0-0' )}}
+              </ion-label>
+            </ion-col>
+            <ion-col size="auto">
+              <ion-icon class="timer_octa " color="primary"></ion-icon>
+              <ion-label>
+                {{user.app_subscriber_remain_day_mask}}
+              </ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+
+        <ion-col class="online-icon" size="2">
+          <ion-icon class="online_octa"
+            [color]=" user.app_subscriber_is_online == '1' ? 'primary' : 'tertiary' "></ion-icon>
+        </ion-col>
+        <ion-col class="more-icon" size="2">
+          <ion-icon class=" forward_arrow_octa"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <ion-list *ngIf="!loaded" class="users-grid-container">
+
+    <ion-item *ngFor="let i of skeleton_items">
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
 
 </ion-content>

@@ -217,6 +217,12 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
+    // this.storage.get('data').then(data=>{
+    //   if(data){
+    //     this.router.navigate(['/main-view'], {replaceUrl : true})
+    //   }
+   
+    // })
     this.headers = this.apiService.getHeaders();
 
     this.initServerList();

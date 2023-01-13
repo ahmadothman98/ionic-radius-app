@@ -1,0 +1,46 @@
+ion-content::part(background){
+    background-color:#EEE !important;
+    
+}
+ion-title{
+    margin: 0 10px !important;
+}
+.popup-btn{
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    font-size: 16px;
+    color: #5f6e6e;
+    
+}
+ion-list{
+    padding: 0;
+    background:#EEE;
+    // height: 100%;
+    
+
+}
+ion-item{
+    --padding-start : 0;
+    --inner-padding-end : 0;
+    width: 100%;
+    background:#cbe9eb;
+    cursor:pointer;
+    vertical-align:middle;
+    border-bottom: 0.55px solid #cbe9eb !important;
+    text-align: center;
+    --border-style : none;
+
+}
+ion-item::part(native){
+    width: 100%;
+}
+.modal-title{
+    font-size: 14px;
+    direction: rtl;
+    font-weight: bolder ;
+    padding-right: -5%;
+}
+.sub-name{
+    font-size: 16px !important;
+}

@@ -14,7 +14,7 @@ export class StorageService {
    }
 
   async get(key: string){
-    return this.storage.get(this.storage_name + key);
+    return this.storage.get(this.storage_name + key)
   }
   async set(key: string, value: any){
     return this.storage.set(this.storage_name + key, value);
