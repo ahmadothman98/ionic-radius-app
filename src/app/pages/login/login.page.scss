@@ -16,7 +16,7 @@ ion-card{
     margin: 0;
     border-radius: 10px;
     // border: 1px sol
-    background-color: #fff;
+    background-color: var(--ion-color-primary-blank);
     width: 80%;
 }
 
@@ -25,22 +25,10 @@ ion-card-content{
     padding:0;
 }
 
-
-ion-icon[name = "person"]{
-    color: #4b4b4b;
-}
-// ion-modal {
-//     --height: 90vw;
-//     --width: 90vw;
-//     --border-radius: 16px;
-//     --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-//
 .cancel-button{
     --color: var(--ion-color-primary-contrast) !important;
 }
-ion-modal .ion-page{
-    background-color: #000;
-}
+
 .account-row, .account-col{
     max-height: 50vh;
 }    
@@ -59,7 +47,7 @@ ion-modal .ion-page{
     color: grey;
 }
 .account-item ion-icon{
-    color: #404e4e;
+    color: var(--ion-color-primary-font);
     
 }
 .account-item ion-icon:first-of-type{
@@ -72,15 +60,13 @@ ion-modal .ion-page{
 .server-name{
     font-weight: bold;
     font-size: 18px;
-    color: #404e4e;
+    color: var(--ion-color-primary-font);
 }
 .user-name{
     font-size: 12px;
 }
 .add-act-btn{
     --background: var(--ion-color-primary);
-    --background-activated: var(--ion-color-primary-shade);
-    // --background-focused: #10878A;
     --border-radius: 55px;
 }
 .choose-account{
@@ -96,7 +82,6 @@ ion-modal .ion-page{
     display: flex;
 }
 .cancel-modal{
-    // color: #6b6b6b;
     position: absolute;
     opacity: 0.8;
 }

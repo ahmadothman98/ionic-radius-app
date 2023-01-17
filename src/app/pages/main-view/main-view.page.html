@@ -1,19 +1,25 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar color="primary" [hidden]="!hide_search">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>{{subscribers_list_title}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="pageChanged(0)">
+      <ion-button (click)="toggleSearch()">
+        <ion-icon class="search_octa"></ion-icon>
+      </ion-button>
+      <ion-button (click)="refreshSubscribers()">
         <ion-icon class="refresh_octa"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar color="primary" [hidden]="hide_search">
+    <ion-searchbar [value]="search_value" show-cancel-button="focus" animated="true" placeholder="Search Users" (ionChange)="searchUsers($event)" (ionBlur)="toggleSearch()" (ionCancel)="toggleSearch()"  #searchBar></ion-searchbar>
+  </ion-toolbar>
 </ion-header>
 
 
-<ion-menu contentId="main-content" >
+<ion-menu contentId="main-content" swipeGesture="false">
   <div class="menu-content">
     <div class="left-menu">
       <div class="menu-logo">
@@ -55,7 +61,7 @@
 <ion-content [scrollEvents]="true" scrollY="true" #content id="main-content">
   <div class="outer-toolbar">
     <div slot="top" class="condition-toolbar">
-      <div (click)="change_condition(condition)" *ngFor="let condition of condition_list" class="condition-button"
+      <div (click)="changeCondition(condition)" *ngFor="let condition of condition_list" class="condition-button"
         [style]="selected_condition.condition != condition.condition ? 'opacity : 0.7; color : var(--ion-color-tertiary)' : 'opacity : 1 ; color : var(--ion-color-primary)' ">
         <div>
           <ion-icon class="{{condition.icon}} condition-icon">
@@ -65,7 +71,9 @@
           {{condition.title}}
         </div>
         <div class="condition-number">
-          {{condition.totals}}
+          <span *ngIf="conditions_loaded">{{condition.totals}}</span>
+          <ion-skeleton-text *ngIf="!conditions_loaded"  class="animated" style="width: 100%; height: 14px; margin: 0;" ></ion-skeleton-text>
+          
         </div>
         <div class="bar" [hidden]="selected_condition.condition != condition.condition">
         </div>
@@ -75,7 +83,7 @@
 
   <div class="paginator" >
     <div>
-      <ion-button [disabled]="rendered_page_number == 0 || !loaded " (click)="pageChanged(rendered_page_number - 1)">
+      <ion-button [disabled]="rendered_page_number == 0 || !loaded " (click)="page_change = true; changePage(rendered_page_number - 1)">
         < </ion-button>
     </div>
 
@@ -83,7 +91,7 @@
       <ion-label *ngIf="(rendered_page_number >= 2 && page_change)" color="primary">...</ion-label>
 
       <div *ngIf="(rendered_page_number == 0 ? false : true) && (loaded || page_change)">
-        <ion-button (click)="pageChanged(rendered_page_number - 1)" color="secondary">
+        <ion-button (click)="page_change = true ;changePage(rendered_page_number - 1)" color="secondary">
           {{rendered_page_number }}
         </ion-button>
       </div>
@@ -92,33 +100,33 @@
         <ion-button *ngIf="loaded || page_change">{{rendered_page_number + 1 }}</ion-button>
         <div *ngIf="!loaded && !page_change" style="display: flex; gap: 20px;">
           <p style="height: 5px; width: 5px;">
-            <ion-skeleton-text [animated]="true" style="width: 100%;" ></ion-skeleton-text>
+            <ion-skeleton-text class="animated" style="width: 100%;" ></ion-skeleton-text>
           </p>
           <p style="height: 5px; width: 5px;">
-            <ion-skeleton-text [animated]="true" style="width: 100%;" ></ion-skeleton-text>
+            <ion-skeleton-text class="animated" style="width: 100%;" ></ion-skeleton-text>
           </p>
           <p style="height: 5px; width: 5px;">
-            <ion-skeleton-text [animated]="true" style="width: 100%;" ></ion-skeleton-text>
+            <ion-skeleton-text class="animated" style="width: 100%;" ></ion-skeleton-text>
           </p>
           <p style="height: 5px; width: 5px;">
-            <ion-skeleton-text [animated]="true" style="width: 100%;" ></ion-skeleton-text>
+            <ion-skeleton-text class="animated" style="width: 100%;" ></ion-skeleton-text>
           </p>
         </div>
   
       </div>
      
-      <div *ngIf="(pageExists(rendered_page_number + 1) &&  (loaded) || page_change)" >
-        <ion-button (click)="pageChanged(rendered_page_number + 1)" color="secondary">{{rendered_page_number +
+      <div *ngIf="pageExists(rendered_page_number + 1) &&  (loaded || page_change)" >
+        <ion-button (click)="page_change = true; changePage(rendered_page_number + 1)" color="secondary">{{rendered_page_number +
           2}}</ion-button>
       </div>
 
-      <ion-label *ngIf="(pageExists(rendered_page_number + 2) &&  loaded) || page_change" color="primary">
+      <ion-label *ngIf="pageExists(rendered_page_number + 2) &&  (loaded || page_change) " color="primary">
         ...
 
       </ion-label>
     </div>
     <div>
-      <ion-button [disabled]="!pageExists(rendered_page_number+1) || !loaded " (click)="pageChanged(rendered_page_number + 1)">
+      <ion-button [disabled]="!pageExists(rendered_page_number+1) || !loaded " (click)="page_change = true; changePage(rendered_page_number + 1)">
         >
       </ion-button>
     </div>
@@ -171,19 +179,19 @@
 
   <ion-list *ngIf="!loaded" class="users-grid-container">
 
-    <ion-item *ngFor="let i of skeleton_items">
-      <ion-thumbnail slot="start">
-        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+    <ion-item style="height: 90px;" *ngFor="let i of skeleton_items">
+      <ion-thumbnail slot="start" style="margin-right: 0;">
+        <ion-skeleton-text class="animated"  style="border-radius: 100%; width: 40px; height: 40px;"></ion-skeleton-text>
       </ion-thumbnail>
       <ion-label>
-        <h3>
-          <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+        <h3 style="padding-left: 0;">
+          <ion-skeleton-text class="animated"  style="width: 80%;"></ion-skeleton-text>
         </h3>
         <p>
-          <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+          <ion-skeleton-text class="animated"  style="width: 60%;"></ion-skeleton-text>
         </p>
         <p>
-          <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+          <ion-skeleton-text class="animated"  style="width: 30%;"></ion-skeleton-text>
         </p>
       </ion-label>
     </ion-item>

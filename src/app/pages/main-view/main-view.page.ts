@@ -2,7 +2,7 @@ import { Component, OnInit, QueryList, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ApiService } from '../../services/api/api.service';
-import { IonContent, MenuController, ModalController, AnimationController } from '@ionic/angular';
+import { IonContent, MenuController, ModalController, AnimationController, IonSearchbar } from '@ionic/angular';
 import { App, AppInfo } from '@capacitor/app';
 import { Platform } from '@ionic/angular';
 import { DEF } from '../../../providers/definitions/definitions';
@@ -17,7 +17,7 @@ import { UserPopupComponent } from 'src/app/components/user-popup/user-popup.com
 export class MainViewPage implements OnInit {
 
   @ViewChild('content') content: IonContent;
-  @ViewChild('all_users') all_users: QueryList<any>;
+  @ViewChild('searchBar') searchBar : IonSearchbar;
 
   token: any;
   data: any;
@@ -52,6 +52,9 @@ export class MainViewPage implements OnInit {
   skeleton_items = Array(20).fill(1);
   loaded: boolean = false;
   page_change = false;
+  conditions_loaded = false;
+  search_value = '';
+  hide_search = true;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -60,7 +63,7 @@ export class MainViewPage implements OnInit {
     private platform: Platform,
     private menuCtrl : MenuController,
     private modalCtrl : ModalController,
-    private   animationCtrl: AnimationController
+    private animationCtrl: AnimationController
   ) {
       // if (this.privilages_form.service_pricing_form.is_permit === '1') {
         this.menu_pages?.push({ title: this.pref_lang === "ar" ? DEF.AR_MY_SERVICES : DEF.EN_MY_SERVICES, page_name: 'my-services', icon: 'services_octa' });
@@ -88,18 +91,19 @@ export class MainViewPage implements OnInit {
 
 
   async initData() {
+    //data initialization
 
-    await this.get_conditions();
-    this.user_list = await this.getUsers(0);
-    this.user_per_page = this.user_list.length;
-    await this.get_balance();
+    this.conditions_loaded = false;
+    await this.getConditions(); // get totals of conditions
+    this.user_list = await this.getUsers(0); // load user list
+    this.user_per_page = this.user_list.length; 
+    await this.getBalance(); 
     await this.getAppVersion();
     return this.data;
   }
 
   async getAppVersion(){
-    
-    
+
     if( (this.platform.is('android') || this.platform.is('ios')) && !this.platform.is('mobileweb')){
       
       App.getInfo().then((info) => {
@@ -117,7 +121,7 @@ export class MainViewPage implements OnInit {
   }
   
 
-  async get_balance() {
+  async getBalance() {
     let url = this.data.user_account.server_link + '/api/action.php';
     let apiData = {
       action:"get_account_balance",
@@ -130,7 +134,8 @@ export class MainViewPage implements OnInit {
     
   }
 
-  async getUsers(page: number = 0) {
+  async getUsers(page: number = 0, search_value= this.search_value) {
+    console.log((this.rendered_page_number == 0 ? false : true) && (this.loaded || this.page_change))
 
     let url = this.data.user_account.server_link + '/api/get_users.php';
 
@@ -142,6 +147,11 @@ export class MainViewPage implements OnInit {
       "condition": this.selected_condition.condition,
       "page_no": page
     }
+    if(search_value){
+      console.log('if');
+      
+      Object.assign(apiData, {"search_value": search_value})
+    }
 
     const response = await this.apiService.post(url, this.headers, apiData);
     let user_list: [] = await JSON.parse(response.data).subscriber;
@@ -151,7 +161,7 @@ export class MainViewPage implements OnInit {
 
   }
 
-  async get_conditions() {
+  async getConditions() {
     let url = this.data.user_account.server_link + '/api/app_dealer_counters.php';
     let apiData = {
       "app_dealer_id": this.data.app_dealer_id,
@@ -159,8 +169,7 @@ export class MainViewPage implements OnInit {
     }
     const response = await this.apiService.post(url, this.headers, apiData);
 
-    let data = JSON.parse(response.data);
-
+    let data =  await JSON.parse(response.data);
     this.condition_list[0].totals = data.total_subs;
     this.condition_list[1].totals = data.online;
     this.condition_list[2].totals = data.offline;
@@ -170,57 +179,42 @@ export class MainViewPage implements OnInit {
     this.condition_list[6].totals = data.archived;
     this.condition_list[7].totals = data.infected;
     this.condition_list[8].totals = data.over_credit_limit;
+    this.conditions_loaded = true;
 
   }
 
-  async change_condition(condition: { title: string, condition: string, totals: string, icon: string; }) {
-    this.user_list = null;
-    this.selected_condition = condition;
+  async changeCondition(condition: { title: string, condition: string, totals: string, icon: string; }) {
+    this.user_list = null; // reset user list
+    this.selected_condition = condition; 
+    this.search_value = ''; // reset search value
 
-    this.page_change = false;
-    this.loaded = false;
-    // this.start_loading().then(async () => {
+    this.page_change = false; // reload pagination numbers
+    this.loaded = false; // load skeletons
     this.user_list = await this.getUsers()
-    this.loaded = true;
-    
-
-    // this.stop_loading();
-    this.page_no = 0;
+    this.loaded = true; // remove skeletons
+    this.page_no = 0; 
     this.rendered_page_number = 0;
-    // });
 
   }
 
-  // async start_loading() {
-  //   this.loading = await this.loadingCtrl.create({
-  //     message: 'Loading Page ...',
-  //   });
-  //   this.loading.present();
-  // }
-  // async stop_loading() {
-  //   this.loading.dismiss();
-  // }
-  async pageChanged(page: number) {
+
+  async changePage(page: number) {
     if (page >= 0) {
-      // this.loading = await this.loadingCtrl.create({
-      //   message: 'Getting Data',
-      // });
-      // await this.loading.present();
-      this.loaded = false;
+      
+      this.loaded = false; //load skeletons
       this.page_change = true;
       this.page_no = page;
-      this.user_list = await this.getUsers(this.page_no);
       this.rendered_page_number = this.page_no;
-      this.loaded = true;
+      this.user_list = await this.getUsers(this.page_no);
+      this.loaded = true; //remove skeletons
 
-      // await this.loading.dismiss();
     }
-    this.content.scrollToTop(100).then(() => {
+    // this.content.scrollToTop(100).then(() => {
 
-    })
+    // })
   }
   pageExists(page_to_check: number) {
-    let page_exists = this.user_per_page * (page_to_check) < parseInt(this.selected_condition.totals) ? true : false; // check for next page
+    let page_exists = this.user_per_page * (page_to_check) < parseInt(this.selected_condition.totals) ? true : false; // check for page if exists
     return page_exists;
   }
 
@@ -282,19 +276,40 @@ export class MainViewPage implements OnInit {
     modal.present();
     }
 
+  refreshSubscribers(){
+    this.conditions_loaded = false; //for animation
+    this.getConditions();
+    this.changeCondition(this.selected_condition)
+  }
+
+
+  async searchUsers(e: any){
+    
+    this.search_value = e.detail.value;
+    this.loaded = false; // show skeleton
+    this.user_list = await this.getUsers()
+    this.loaded = true; // remove skeleton
+  }
+
+  toggleSearch(){
+    this.hide_search = !this.hide_search;
+    this.searchBar.setFocus();
+    if(this.search_value){
+      this.search_value = '';
+    }
+    
+  }
   ngOnInit() {
     this.storage.get('data').then(async (data) => {
       this.data = data;
 
       this.headers = this.apiService.getHeaders(data.jwt)
-      // this.start_loading().then(async () => {
-        
+
       this.page_change = false;
 
       this.loaded = false;
       await this.initData().then((data) => {
         this.loaded = true;
-        // this.stop_loading();
       })
 
     });

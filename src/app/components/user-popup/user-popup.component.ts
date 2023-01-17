@@ -38,7 +38,7 @@ export class UserPopupComponent implements OnInit {
   
   user_operation(user : any, option : any){
     
-
+    
   }
 
   cancel() {
