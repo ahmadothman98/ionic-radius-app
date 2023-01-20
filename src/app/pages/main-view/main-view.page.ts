@@ -1,8 +1,8 @@
-import { Component, OnInit, QueryList, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ApiService } from '../../services/api/api.service';
-import { IonContent, MenuController, ModalController, AnimationController, IonSearchbar } from '@ionic/angular';
+import { IonContent,  ModalController, AnimationController, IonSearchbar } from '@ionic/angular';
 import { App, AppInfo } from '@capacitor/app';
 import { Platform } from '@ionic/angular';
 import { DEF } from '../../../providers/definitions/definitions';
@@ -15,6 +15,7 @@ import { UserPopupComponent } from 'src/app/components/user-popup/user-popup.com
 })
 
 export class MainViewPage implements OnInit {
+[x: string]: any;
 
   @ViewChild('content') content: IonContent;
   @ViewChild('searchBar') searchBar : IonSearchbar;
@@ -28,6 +29,7 @@ export class MainViewPage implements OnInit {
   headers: any;
   user_per_page: number = 100;
   next_page_exists: boolean = false;
+
   rendered_page_number: number = 0;
   menu_pages : { title: string; page_name: string; icon: string; }[] = [];
   condition_list = [
@@ -55,13 +57,17 @@ export class MainViewPage implements OnInit {
   conditions_loaded = false;
   search_value = '';
   hide_search = true;
+  is_search: boolean = false; 
+  current_page_color = 'primary'
+  next_page_color = 'secondary';
+  prev_page_color = 'secondary';
+  debounce_duration = 1000;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private apiService: ApiService,
     private storage: StorageService,
     private platform: Platform,
-    private menuCtrl : MenuController,
     private modalCtrl : ModalController,
     private animationCtrl: AnimationController
   ) {
@@ -95,7 +101,9 @@ export class MainViewPage implements OnInit {
 
     this.conditions_loaded = false;
     await this.getConditions(); // get totals of conditions
-    this.user_list = await this.getUsers(0); // load user list
+    let data = await this.getUsers(0);
+    this.user_list = data.subscriber // load user list
+    
     this.user_per_page = this.user_list.length; 
     await this.getBalance(); 
     await this.getAppVersion();
@@ -135,7 +143,6 @@ export class MainViewPage implements OnInit {
   }
 
   async getUsers(page: number = 0, search_value= this.search_value) {
-    console.log((this.rendered_page_number == 0 ? false : true) && (this.loaded || this.page_change))
 
     let url = this.data.user_account.server_link + '/api/get_users.php';
 
@@ -148,17 +155,14 @@ export class MainViewPage implements OnInit {
       "page_no": page
     }
     if(search_value){
-      console.log('if');
       
       Object.assign(apiData, {"search_value": search_value})
     }
-
+    
     const response = await this.apiService.post(url, this.headers, apiData);
-    let user_list: [] = await JSON.parse(response.data).subscriber;
-
-
-    return user_list;
-
+    let data = await JSON.parse(response.data);
+    this.next_page_exists = data.load_more;
+    return data;
   }
 
   async getConditions() {
@@ -184,45 +188,64 @@ export class MainViewPage implements OnInit {
   }
 
   async changeCondition(condition: { title: string, condition: string, totals: string, icon: string; }) {
+    console.log(this.selected_condition.condition, condition.condition, this.is_search);
+    
+    if(this.selected_condition.condition != condition.condition || this.is_search) {
+    console.log('here');
+    this.toggleSearch(0)
     this.user_list = null; // reset user list
     this.selected_condition = condition; 
-    this.search_value = ''; // reset search value
-
     this.page_change = false; // reload pagination numbers
     this.loaded = false; // load skeletons
-    this.user_list = await this.getUsers()
+    this.search_value = ''; // reset search value    
+    this.is_search  = false;
+    let data = await this.getUsers(0);
+    this.user_list = data.subscriber // load user list
+
     this.loaded = true; // remove skeletons
     this.page_no = 0; 
     this.rendered_page_number = 0;
-
+    }
   }
 
 
   async changePage(page: number) {
     if (page >= 0) {
-      
+      this.changePageColor(page);
       this.loaded = false; //load skeletons
       this.page_change = true;
+      let data = await this.getUsers(page);
       this.page_no = page;
       this.rendered_page_number = this.page_no;
-      this.user_list = await this.getUsers(this.page_no);
+      this.user_list = data.subscriber // load user list
+      this.changePageColor(page);
+
+      
       this.loaded = true; //remove skeletons
 
     }
-    // this.content.scrollToTop(100).then(() => {
 
-    // })
   }
-  pageExists(page_to_check: number) {
+  changePageColor(page: number) {
+    if(page > this.page_no){
+      this.next_page_color = 'primary';
+      this.current_page_color = 'secondary';
+    }
+    else if(page < this.page_no){
+      this.prev_page_color = 'primary';
+      this.current_page_color = 'secondary';
+    }
+    else {
+      this.current_page_color = 'primary';
+      this.next_page_color = 'secondary';
+      this.prev_page_color = 'secondary';
+    }
+  }
+  pageExists(page_to_check: number) { // only checks if the next 2 pages exist
     let page_exists = this.user_per_page * (page_to_check) < parseInt(this.selected_condition.totals) ? true : false; // check for page if exists
     return page_exists;
   }
 
-
-
-  refresh_balance(){
-
-  }
   navigateToPage(page_name: any){
     console.log('should_navigatenavigate');
     let page = '/' + page_name;
@@ -232,6 +255,7 @@ export class MainViewPage implements OnInit {
 
   //
   //
+
   enterAnimation = (baseEl: HTMLElement) => {
     const root = baseEl.shadowRoot;
 
@@ -262,7 +286,8 @@ export class MainViewPage implements OnInit {
   leaveAnimation = (baseEl: HTMLElement) => {
     return this.enterAnimation(baseEl).direction('reverse');
   };
-  async user_menu(user?: any) {
+
+  async userMenu(user: any){
     const modal = await this.modalCtrl.  create({
       component:  UserPopupComponent,
       componentProps: {
@@ -273,32 +298,72 @@ export class MainViewPage implements OnInit {
       leaveAnimation: this.leaveAnimation,
 
     });
-    modal.present();
-    }
+    modal.present();}
+    
+  async filterPopup(){
+    console.log('popop');
+  }
 
-  refreshSubscribers(){
+  async refreshSubscribers(){
     this.conditions_loaded = false; //for animation
     this.getConditions();
-    this.changeCondition(this.selected_condition)
+    this.user_list = null; // reset user list 
+    this.page_change = false; // reload pagination numbers
+    this.loaded = false; // load skeletons
+    let data = await this.getUsers(0);
+    this.user_list = data.subscriber // load user list
+    
+    this.loaded = true; // remove skeletons
+    this.page_no = 0; 
+    this.rendered_page_number = 0;
+    // this.toggleSearch(0)
   }
 
 
   async searchUsers(e: any){
+    console.log()
     
-    this.search_value = e.detail.value;
-    this.loaded = false; // show skeleton
-    this.user_list = await this.getUsers()
-    this.loaded = true; // remove skeleton
+    console.log('2');
+    
+    this.is_search = true;
+    this.page_no = 0;
+    this.rendered_page_number = 0;
+    this.search_value = e.target.value;
+    this.loaded = this.page_change = false; // show skeleton
+    
+    let data = await this.getUsers(0);
+    this.user_list = data.subscriber // load user list
+    
+    this.loaded = this.page_change = true; // remove skeleton
+    this.debounce_duration = 1000;
+    console.log('here3');
+    
   }
 
-  toggleSearch(){
-    this.hide_search = !this.hide_search;
-    this.searchBar.setFocus();
-    if(this.search_value){
-      this.search_value = '';
+  toggleSearch(order : number){
+    if(order === 0 ){
+      this.hide_search = true;
     }
+    else{
+
+      this.hide_search = false;
+      this.searchBar.setFocus();
+    }
+
     
   }
+  blur(){
+    this.hide_search = true;
+    if(this.search_value === ''){
+      this.changeCondition(this.selected_condition)
+    }
+  }
+  clearSearch(){
+    this.search_value = ''
+    console.log('cleared');
+    
+  }
+
   ngOnInit() {
     this.storage.get('data').then(async (data) => {
       this.data = data;

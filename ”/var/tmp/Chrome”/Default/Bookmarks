@@ -1,0 +1,69 @@
+{
+   "checksum": "a499b4ddd577165eb3fd2d1c745a7d5b",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13318619690275181",
+            "date_last_used": "0",
+            "guid": "b0ee3c67-0795-4da5-af1e-c64990a2823c",
+            "id": "5",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "OctaRadius",
+            "type": "url",
+            "url": "http://localhost:8100/login"
+         }, {
+            "date_added": "13318678257284514",
+            "date_last_used": "0",
+            "guid": "a1e1654a-413f-4d80-9565-6a5f5d40910e",
+            "id": "7",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "192.168.87.194",
+            "type": "url",
+            "url": "http://192.168.87.194:8000/"
+         }, {
+            "date_added": "13318678268660522",
+            "date_last_used": "0",
+            "guid": "5cf2f6b2-bb26-401c-8616-dad293937162",
+            "id": "8",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "Inspect with Chrome Developer Tools",
+            "type": "url",
+            "url": "chrome://inspect/#devices"
+         } ],
+         "date_added": "13318619659896259",
+         "date_last_used": "0",
+         "date_modified": "13318678268660522",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Bookmarks bar",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13318619659896261",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other bookmarks",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13318619659896262",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile bookmarks",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}

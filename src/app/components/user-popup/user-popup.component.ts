@@ -9,6 +9,9 @@ import { DEF } from 'src/providers/definitions/definitions';
   styleUrls: ['./user-popup.component.scss'],
 })
 export class UserPopupComponent implements OnInit {
+  static user_menu() {
+    throw new Error('Method not implemented.');
+  }
 
   option_menu : any = [];
   maintainer: any;
@@ -29,7 +32,7 @@ export class UserPopupComponent implements OnInit {
   data: any;
   user: any;
 
-  constructor(private modalCtrl : ModalController, private   animationCtrl: AnimationController, private storage : StorageService) {
+  constructor(private modalCtrl : ModalController,  private storage : StorageService) {
     
     }
   

@@ -1,2 +1,3 @@
-2022/12/30-10:59:23.140 f67 Creating DB /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Sync Data/LevelDB since it was missing.
-2022/12/30-10:59:23.149 f67 Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Sync Data/LevelDB/MANIFEST-000001
+2023/01/19-18:34:20.070 127e Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Sync Data/LevelDB/MANIFEST-000001
+2023/01/19-18:34:20.070 127e Recovering log #3
+2023/01/19-18:34:20.084 127e Reusing old log /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Sync Data/LevelDB/000003.log 
