@@ -6,12 +6,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./filter-popup.component.scss'],
 })
 export class FilterPopupComponent implements OnInit {
+  filters = {
+    name : '' ,
+    username : '',
+    address : '',
+    category : '',
+    speed : '',
+    consumption : ''
+  }
+
+
   showPopup() {
     throw new Error('Method not implemented.');
   }
 
   constructor() {}
-
+  filter(){
+  }
   ngOnInit() {}
 
 }
+

@@ -7,6 +7,7 @@ import { App, AppInfo } from '@capacitor/app';
 import { Platform } from '@ionic/angular';
 import { DEF } from '../../../providers/definitions/definitions';
 import { UserPopupComponent } from 'src/app/components/user-popup/user-popup.component';
+import { FilterPopupComponent } from 'src/app/components/filter-popup/filter-popup.component';
 
 @Component({
   selector: 'app-main-view',
@@ -15,7 +16,6 @@ import { UserPopupComponent } from 'src/app/components/user-popup/user-popup.com
 })
 
 export class MainViewPage implements OnInit {
-[x: string]: any;
 
   @ViewChild('content') content: IonContent;
   @ViewChild('searchBar') searchBar : IonSearchbar;
@@ -298,10 +298,19 @@ export class MainViewPage implements OnInit {
       leaveAnimation: this.leaveAnimation,
 
     });
-    modal.present();}
+    modal.present();
+  }
     
   async filterPopup(){
-    console.log('popop');
+    const modal = await this.modalCtrl.  create({
+      component:  FilterPopupComponent,
+      animated: true,
+      cssClass: 'filter-popup',
+      enterAnimation: this.enterAnimation,
+      leaveAnimation: this.leaveAnimation,
+
+    });
+    modal.present();
   }
 
   async refreshSubscribers(){
@@ -362,6 +371,10 @@ export class MainViewPage implements OnInit {
     this.search_value = ''
     console.log('cleared');
     
+  }
+
+  async getFilteredUsers(filters : any){
+    let url = this.getUsers();
   }
 
   ngOnInit() {

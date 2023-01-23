@@ -15,9 +15,9 @@ import { FormsModule } from '@angular/forms';
 import { AppVersion } from '@ionic-native/app-version';
 import { LoginGuard } from './guards/login/login.guard';
 import { UserPopupComponent } from './components/user-popup/user-popup.component';
-
+import { FilterPopupComponent } from './components/filter-popup/filter-popup.component';
 @NgModule({
-  declarations: [AppComponent, UserPopupComponent],
+  declarations: [AppComponent, UserPopupComponent, FilterPopupComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,  IonicStorageModule.forRoot(), NgxPaginationModule, FormsModule],
 
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, AuthService, AuthGuard, LoginGuard],

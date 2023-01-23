@@ -1,3 +1,63 @@
-<p>
-  filter-popup works!
-</p>
+<ion-list>
+  <ion-item>
+    <ion-label>
+      By name:
+    </ion-label>
+    <ion-input [(ngModel)]="filters.name">
+
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>
+      By username:
+    </ion-label>
+    <ion-input [(ngModel)]="filters.username">
+      
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>
+      By address:
+    </ion-label>
+    <ion-input [(ngModel)]="filters.address">
+      
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>
+      By category:
+    </ion-label>
+    <ion-input [(ngModel)]="filters.category">
+      
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>
+      By speed:
+    </ion-label>
+    <ion-input [(ngModel)]="filters.speed">
+      
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>
+      By consumption:
+    </ion-label>
+    <ion-input [(ngModel)]="filters.consumption">
+      
+    </ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-button color="primary" (click)="filter()">
+      <ion-icon name="filter"></ion-icon>
+      <ion-label>Filter</ion-label>
+    </ion-button>
+  </ion-item>
+
+</ion-list>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AnimationController, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { DEF } from 'src/providers/definitions/definitions';
 
