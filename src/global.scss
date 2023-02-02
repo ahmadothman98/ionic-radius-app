@@ -126,3 +126,11 @@ ion-icon {
     font-weight: normal;
     font-style: normal;
   }
+
+.popup{
+    width: 100%;
+    app-filter-popup, app-subscriber-popup{
+        width: 85%;
+    }
+
+}

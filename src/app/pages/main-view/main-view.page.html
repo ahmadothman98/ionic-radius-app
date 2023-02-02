@@ -18,7 +18,7 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar color="primary" [hidden]="hide_search">
-    <ion-searchbar [debounce]="debounce_duration" [value]="search_value" show-cancel-button="focus" animated="true" placeholder="Search Users" (ionBlur)="blur()" (search)="searchUsers($event)" (ionClear)="clearSearch()"  (ionCancel)="changeCondition(selected_condition)"  #searchBar></ion-searchbar>
+    <ion-searchbar [debounce]="debounce_duration" [value]="search_value" show-cancel-button="focus" animated="true" placeholder="Search Subscribers" (ionBlur)="blur()" (search)="searchSubscribers($event)" (ionClear)="clearSearch()"  (ionCancel)="changeCondition(selected_condition)"  #searchBar></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -139,35 +139,35 @@
     </div>
   </div>
 
-  <div *ngIf="loaded" class="users-grid-container">
-    <ion-grid class="users-grid">
-      <ion-row *ngFor="let user of user_list; let i = index" class="subscriber ion-activatable ripple-parent" (click)="userMenu(user)">
+  <div *ngIf="loaded" class="subscribers-grid-container">
+    <ion-grid class="subscribers-grid">
+      <ion-row *ngFor="let subscriber of subscriber_list; let i = index" class="subscriber ion-activatable ripple-parent" (click)="subscriberMenu(subscriber)">
         <ion-ripple-effect class="custom-ripple"></ion-ripple-effect>
-        <ion-col class="user-icon" size="2">
+        <ion-col class="subscriber-icon" size="2">
           <ion-icon
-            [color]="user.app_subscriber_is_active == '1' && user.app_subscriber_on_grace_period  === '0' || user.app_subscriber_on_grace_period == '1' ? 'primary' : 'secondary'"
-            [class]="user.app_subscriber_on_grace_period == '0' ? 'contact_octa' : 'grace_period_octa'"></ion-icon>
+            [color]="subscriber.app_subscriber_is_active == '1' && subscriber.app_subscriber_on_grace_period  === '0' || subscriber.app_subscriber_on_grace_period == '1' ? 'primary' : 'secondary'"
+            [class]="subscriber.app_subscriber_on_grace_period == '0' ? 'contact_octa' : 'grace_period_octa'"></ion-icon>
         </ion-col>
         <ion-col size="7" class="main-col">
           <ion-row class="subscriber-name">
-            <ion-label>{{user.app_subscriber_name}}</ion-label>
+            <ion-label>{{subscriber.app_subscriber_name}}</ion-label>
           </ion-row>
           <ion-row class="subscriber-service">
-            <ion-label>{{user.app_service_name}}</ion-label>
+            <ion-label>{{subscriber.app_service_name}}</ion-label>
           </ion-row>
           <ion-row class="subscriber-info">
             <ion-col size="auto">
               <ion-icon class="cash_octa " color="primary"></ion-icon>
               <ion-label>
                 {{data.currency_sign}}
-                {{ data.app_currency_id == '1' ? (user.app_subscriber_balance_val | number:'1.2-2' ) :
-                (user.app_subscriber_balance_val | number:'1.0-0' )}}
+                {{ data.app_currency_id == '1' ? (subscriber.app_subscriber_balance_val | number:'1.2-2' ) :
+                (subscriber.app_subscriber_balance_val | number:'1.0-0' )}}
               </ion-label>
             </ion-col>
             <ion-col size="auto">
               <ion-icon class="timer_octa " color="primary"></ion-icon>
               <ion-label>
-                {{user.app_subscriber_remain_day_mask}}
+                {{subscriber.app_subscriber_remain_day_mask}}
               </ion-label>
             </ion-col>
           </ion-row>
@@ -175,7 +175,7 @@
 
         <ion-col class="online-icon" size="2">
           <ion-icon class="online_octa"
-            [color]=" user.app_subscriber_is_online == '1' ? 'primary' : 'tertiary' "></ion-icon>
+            [color]=" subscriber.app_subscriber_is_online == '1' ? 'primary' : 'tertiary' "></ion-icon>
         </ion-col>
         <ion-col class="more-icon" size="2">
           <ion-icon class=" forward_arrow_octa"></ion-icon>
@@ -184,7 +184,7 @@
     </ion-grid>
   </div>
 
-  <ion-list *ngIf="!loaded" class="users-grid-container">
+  <ion-list *ngIf="!loaded" class="subscribers-grid-container">
 
     <ion-item style="height: 90px;" *ngFor="let i of skeleton_items">
       <ion-thumbnail slot="start" style="margin-right: 0;">

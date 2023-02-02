@@ -1,0 +1,380 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button  menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </ion-button>
+    <ion-title *ngIf="newUser">Add subscriber</ion-title>
+    <ion-title *ngIf="!newUser">Edit subscriber</ion-title>
+    <ion-buttons end style="margin-right: 5px !important;">
+      <ion-button block [disabled]="!user.form.valid" (click)="submit()">
+        <ion-icon style="color: white; font-size: 34px;" name="send_octa"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list no-lines>
+    <form #user="ngForm">
+      <ion-grid class="main_container">
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Full Name
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input type="text" [(ngModel)]="app_subscriber_name" name="name" placeholder="Required" required>
+            </ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Username
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input *ngIf="newUser" [(ngModel)]="app_subscriber_username" type="text" name="username"
+              (ionChange)="onChangeTime($event)" placeholder="Required" required></ion-input>
+            <ion-input *ngIf="!newUser" class="disabled" [readonly]="true" [(ngModel)]="app_subscriber_username"
+              type="text" name="username" (ionChange)="onChangeTime($event)"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Password
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_password" type="text" name="password"
+              (ionChange)="onChangeTime($event)" placeholder="Required" required></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            App. Password
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_login_password" type="text" name="app_password" class="disabled"
+              (ionChange)="onChangeTime($event)" placeholder="Optional" readonly="true"></ion-input>
+          </ion-col>
+          <ion-col size="1" class="centralize" style="margin-right:5px;">
+            <ion-icon name="shuffle_octa" style="font-size: 24px;" (click)="generate_password();"></ion-icon>
+          </ion-col>
+          <ion-col size="1" class="centralize">
+            <ion-icon name="copy_octa" style="font-size: 24px;" (click)="copy_password();"></ion-icon>
+          </ion-col>
+          <ion-col size="1" class="centralize" style="margin-right:5px;">
+            <ion-icon name="close_octa" style="font-size: 24px;" (click)="clear('app_pwd');"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Email
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_email" type="email" name="email" placeholder="Optional"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Address
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_address" type="text" name="address" placeholder="Optional">
+            </ion-input>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="item_container" *ngIf="is_map == '1' && app_node.length > 0">
+          <ion-col class="item_label">
+            Node
+          </ion-col>
+          <ion-col class="item_input">
+            <ng2-completer [(ngModel)]="app_node_name" [openOnFocus]="true" [datasource]="dataNode" (ngModelChange)="reset_poe();"
+              [minSearchLength]="0" name="node" placeholder="Optional"></ng2-completer>
+          </ion-col>
+        </ion-row>
+        
+        <ion-row class="item_container" *ngIf="app_country.length > 0">
+          <ion-col class="item_label">
+            Nationality
+          </ion-col>
+          <ion-col class="item_input">
+
+            <ion-select interface="action-sheet" *ngIf="newUser" [(ngModel)]="app_country_id" name="app_country_nationality"
+              placeholder="Required" required>
+              <ion-select-option *ngFor="let country of app_country" [value]="country.app_country_id">
+                {{ country.app_country_nationality }}
+              </ion-select-option>
+            </ion-select> -->
+            <ion-icon *ngIf="newUser" name="forword_arrow_octa" class="select_arrow"></ion-icon>
+            <ion-input *ngIf="!newUser" class="disabled" [(ngModel)]="app_country_nationality" type="text" name="country"
+              readonly="true"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Mobile
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-col size="3 class="mobile_prfx" style="margin-left:5px;">
+              {{ mobile_prefix_code }}
+               <ion-select interface="action-sheet" [(ngModel)]="mobile_prefix_code" name="mobile_prefix_code" required
+                placeholder="{{ mobile_prefix_code }}" placeholder="Required">
+                <ion-select-option *ngFor="let prefix of mobile_prefix" [value]="prefix">
+                  {{ prefix }}
+                </ion-select-option>
+              </ion-select>
+            </ion-col>
+            <ion-col>
+              <ion-input [(ngModel)]="app_subscriber_mobile" type="number" name="mobile" placeholder="Required" required>
+              </ion-input>
+            </ion-col>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Mobile
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-col size="3 class="mobile_prfx" style="margin-left:5px;">
+              {{ mobile_prefix_code }}
+           
+            </ion-col>
+            <ion-col>
+              <ion-input [(ngModel)]="app_subscriber_mobile" type="number" name="mobile" placeholder="Required" required>
+              </ion-input>
+            </ion-col>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Phone
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_phone" type="number" name="phone" placeholder="Optional"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container" *ngIf="app_service.length > 0">
+          <ion-col class="item_label">
+            Services
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-select interface="action-sheet" [(ngModel)]="app_service_id" name="app_service_name"
+              *ngIf="newUser || isExpired" placeholder="Required" required>
+              <ion-select-option *ngFor="let service of app_service" [value]="service.app_service_id"
+                (ionSelect)="changed($event, 'service');">
+                {{ service.app_service_name }}
+              </ion-select-option>
+            </ion-select>
+            <ion-input *ngIf="!newUser && !isExpired" class="disabled" [(ngModel)]="app_service_name" type="text"
+              name="service" readonly="true">{{ app_service_name }}</ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Auto Recharge
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-toggle [disabled]="disable_service" [(ngModel)]="app_subscriber_auto_recharge" mode="md"
+              name="auto_recharge" color="keppel"></ion-toggle>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            POE?
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-select interface="action-sheet" [(ngModel)]="app_subscriber_poe" name="app_subscriber_poe" placeholder="Required" required>
+              <ion-select-option *ngFor="let p of poe" [value]="p.name">
+                {{ p.title }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container" *ngIf="show_finance_options">
+          <ion-col class="item_label">
+            Parent Account
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-select interface="action-sheet" [(ngModel)]="app_parent_account_id" name="app_parent_account_name" placeholder="Required" required>
+              <ion-select-option *ngFor="let account of parent_account" [value]="account.app_account_id">
+                {{ account.app_account_name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container" *ngIf="show_finance_options">
+          <ion-col class="item_label">
+            Payment Method
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-select interface="action-sheet" [(ngModel)]="app_payment_type_id" name="app_payment_type_id" placeholder="Required" required>
+              <ion-select-option *ngFor="let p of payment_type" [value]="p.app_payment_type_id">
+                {{ p.app_payment_type_name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container" *ngIf="app_collector.length > 0">
+          <ion-col class="item_label">
+            Collector
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-select interface="action-sheet" [(ngModel)]="app_collector_id" name="app_collector_name"
+              placeholder="Required" required>
+              <ion-select-option *ngFor="let collector of app_collector" [value]="collector.app_collector_id">
+                {{ collector.app_collector_name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+          <!-- <ion-col size="1" class="centralize" style="margin-right:5px;">
+            <ion-icon name="close_octa" style="font-size: 32px;" (click)="clear('collector');"></ion-icon>
+          </ion-col> -->
+        </ion-row>
+        <ion-row class="item_container" *ngIf="app_category_1.length > 0">
+          <ion-col class="item_label">
+            Category
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-select interface="action-sheet" [(ngModel)]="app_category_1_id" name="app_category_1_name"
+              placeholder="Optional">
+              <ion-select-option *ngFor="let category of app_category_1" [value]="category.app_subscriber_category_id">
+                {{ category.app_subscriber_category_name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="centralize" style="margin-right:5px;">
+            <ion-icon name="close_octa" style="font-size: 32px;" (click)="clear('cat1');"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container" *ngIf="app_category_2.length > 0">
+          <ion-col class="item_label">
+            Grace Period Cat.
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-select interface="action-sheet" [(ngModel)]="app_category_2_id" name="app_category_2_name"
+              placeholder="Optional">
+              <ion-select-option *ngFor="let category of app_category_2" [value]="category.app_subscriber_category_id">
+                {{ category.app_subscriber_category_name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="centralize" style="margin-right:5px;">
+            <ion-icon name="close_octa" style="font-size: 32px;" (click)="clear('cat2');"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container" *ngIf="app_category_3.length > 0">
+          <ion-col class="item_label">
+            Category 3
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-select interface="action-sheet" [(ngModel)]="app_category_3_id" name="app_category_3_name"
+              placeholder="Optional">
+              <ion-select-option *ngFor="let category of app_category_3" [value]="category.app_subscriber_category_id">
+                {{ category.app_subscriber_category_name }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="centralize" style="margin-right:5px;">
+            <ion-icon name="close_octa" style="font-size: 32px;" (click)="clear('cat3');"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Credit Limit
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_credit_limit" type="number" name="app_subscriber_credit_limit_val"
+              placeholder="Optional"></ion-input>
+          </ion-col>
+          <ion-col size="3 class="centralize">
+            <ion-select interface="action-sheet" [(ngModel)]="app_subscriber_credit_limit_code"
+              name="app_subscriber_credit_limit_code" placeholder="Opt.">
+              <ion-select-option *ngFor="let currency of app_currency1" [value]="currency.app_currency_id">
+                {{ currency.app_currency_code }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="centralize" style="margin-right:5px;">
+            <ion-icon name="close_octa" style="font-size: 32px;" (click)="clear('credit_limit');"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Grace Period
+          </ion-col>
+          <ion-col class="item_input">
+            (days)&nbsp;&nbsp;<ion-input [(ngModel)]="app_subscriber_grace_period" type="number" onpaste="return false;"
+              name="grace_period" placeholder="Optional"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Grace Period Desc.
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_grace_period_desc" type="text" name="grace_period_desc"
+              placeholder="Optional"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Discount
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_disc_val" type="text" name="app_subscriber_disc_val"
+              placeholder="Optional"></ion-input>
+          </ion-col>
+          <ion-col size="3 class="centralize">
+            <ion-select interface="action-sheet" [(ngModel)]="app_subscriber_disc_code_id"
+              name="app_subscriber_disc_code_id" placeholder="Opt.">
+              <ion-select-option *ngFor="let currency of app_currency" [value]="currency.app_currency_id"
+                (ionSelect)="changed($event, 'discount');">
+                {{ currency.app_currency_code }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="centralize" style="margin-right:5px;">
+            <ion-icon name="close_octa" style="font-size: 32px;" (click)="clear('discount');"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">Discount Desc.</ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_disc_desc" type="text" name="app_subscriber_disc_desc"
+              placeholder="Optional"></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Addition
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_add_val" type="text" name="app_subscriber_add_val"
+              placeholder="Optional">
+            </ion-input>
+          </ion-col>
+          <ion-col size="3 class="centralize">
+            <ion-select interface="action-sheet" [(ngModel)]="app_subscriber_add_code_id"
+              name="app_subscriber_add_code_id" placeholder="Opt.">
+              <ion-select-option *ngFor="let currency of app_currency" [value]="currency.app_currency_id"
+                (ionSelect)="changed($event, 'addition');">
+                {{ currency.app_currency_code }}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+          <ion-col size="1" class="centralize" style="margin-right:5px;">
+            <ion-icon name="close_octa" style="font-size: 32px;" (click)="clear('addition');"></ion-icon>
+          </ion-col>
+        </ion-row>
+        <ion-row class="item_container">
+          <ion-col class="item_label">
+            Addition Desc.
+          </ion-col>
+          <ion-col class="item_input">
+            <ion-input [(ngModel)]="app_subscriber_add_desc" type="text" name="app_subscriber_add_desc"
+              placeholder="Optional"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </ion-list>
+</ion-content>

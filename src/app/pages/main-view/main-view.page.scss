@@ -25,7 +25,7 @@ ion-header ion-icon{
 
 }
 
-.user-icon {
+.subscriber-icon {
     font-size: 48px;
     display: flex;
     align-items: center;
@@ -48,7 +48,7 @@ ion-header ion-icon{
 
 .subscriber-name::-webkit-scrollbar,
 .subscriber-info::-webkit-scrollbar,
-.users-grid::-webkit-scrollbar,
+.subscribers-grid::-webkit-scrollbar,
 .subscriber-service::-webkit-scrollbar {
     display: none !important;
 
@@ -176,7 +176,7 @@ ion-header ion-icon{
     width: 50%;
     // line-height: 30px;
 }
-.users-grid-container{
+.subscribers-grid-container{
     height: calc(100% - 150px);
     width: 100vw;
     margin-top: 150px;
@@ -207,7 +207,7 @@ ion-header ion-icon{
 
 }
 
-.users-grid {
+.subscribers-grid {
     padding: 0;
     width: 100%;
     overflow-x: hidden;
@@ -382,9 +382,7 @@ div.bar {
         content: "";
       }
 }
-.filter-popup{
-    height: 70%;
-}
+
 @keyframes shimmer {
     100% {
       transform: translateX(100%);

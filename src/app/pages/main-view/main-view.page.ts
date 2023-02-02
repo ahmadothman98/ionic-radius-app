@@ -6,7 +6,7 @@ import { IonContent,  ModalController, AnimationController, IonSearchbar } from 
 import { App, AppInfo } from '@capacitor/app';
 import { Platform } from '@ionic/angular';
 import { DEF } from '../../../providers/definitions/definitions';
-import { UserPopupComponent } from 'src/app/components/user-popup/user-popup.component';
+import { SubscriberPopupComponent } from 'src/app/components/subscriber-popup/subscriber-popup.component';
 import { FilterPopupComponent } from 'src/app/components/filter-popup/filter-popup.component';
 
 @Component({
@@ -24,10 +24,10 @@ export class MainViewPage implements OnInit {
   data: any;
 
   page_no: number = 0;
-  user_list: any;
+  subscriber_list: any;
   subscribers_list_title: string = "Subscribers List";
   headers: any;
-  user_per_page: number = 100;
+  subscriber_per_page: number = 100;
   next_page_exists: boolean = false;
 
   rendered_page_number: number = 0;
@@ -45,7 +45,7 @@ export class MainViewPage implements OnInit {
   ];
   selected_condition = this.condition_list[0];
 
-  user_modal: any;
+  subscriber_modal: any;
   anim: any;
   balance: string | number = 0;
   app_info: AppInfo;
@@ -62,6 +62,7 @@ export class MainViewPage implements OnInit {
   next_page_color = 'secondary';
   prev_page_color = 'secondary';
   debounce_duration = 1000;
+  subscriber_modal_open: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -101,10 +102,10 @@ export class MainViewPage implements OnInit {
 
     this.conditions_loaded = false;
     await this.getConditions(); // get totals of conditions
-    let data = await this.getUsers(0);
-    this.user_list = data.subscriber // load user list
+    let data = await this.getSubscribers(0);
+    this.subscriber_list = data.subscriber // load subscriber list
     
-    this.user_per_page = this.user_list.length; 
+    this.subscriber_per_page = this.subscriber_list.length; 
     await this.getBalance(); 
     await this.getAppVersion();
     return this.data;
@@ -130,21 +131,21 @@ export class MainViewPage implements OnInit {
   
 
   async getBalance() {
-    let url = this.data.user_account.server_link + '/api/action.php';
+    let url = this.data.subscriber_account.server_link + '/api/action.php';
     let apiData = {
       action:"get_account_balance",
       app_collector_id:this.data.app_collector_id,
       app_dealer_id:this.data.app_dealer_id,
       app_maintainer_id: this.data.app_maintainer_id,
     }
-    const response = await this.apiService.post(url, this.headers, apiData);
+    const response = await this.apiService.post(url, this.headers, apiData);    
     this.balance = JSON.parse(response.data).balance;
     
   }
 
-  async getUsers(page: number = 0, search_value= this.search_value) {
+  async getSubscribers(page: number = 0, search_value= this.search_value) {
 
-    let url = this.data.user_account.server_link + '/api/get_users.php';
+    let url = this.data.subscriber_account.server_link + '/api/get_users.php';
 
     let apiData = {
       "app_dealer_id": this.data.app_dealer_id,
@@ -166,13 +167,13 @@ export class MainViewPage implements OnInit {
   }
 
   async getConditions() {
-    let url = this.data.user_account.server_link + '/api/app_dealer_counters.php';
+    let url = this.data.subscriber_account.server_link + '/api/app_dealer_counters.php';
     let apiData = {
       "app_dealer_id": this.data.app_dealer_id,
       "user_id": this.data.user_id,
     }
     const response = await this.apiService.post(url, this.headers, apiData);
-
+    
     let data =  await JSON.parse(response.data);
     this.condition_list[0].totals = data.total_subs;
     this.condition_list[1].totals = data.online;
@@ -188,19 +189,17 @@ export class MainViewPage implements OnInit {
   }
 
   async changeCondition(condition: { title: string, condition: string, totals: string, icon: string; }) {
-    console.log(this.selected_condition.condition, condition.condition, this.is_search);
     
     if(this.selected_condition.condition != condition.condition || this.is_search) {
-    console.log('here');
     this.toggleSearch(0)
-    this.user_list = null; // reset user list
+    this.subscriber_list = null; // reset subscriber list
     this.selected_condition = condition; 
     this.page_change = false; // reload pagination numbers
     this.loaded = false; // load skeletons
     this.search_value = ''; // reset search value    
     this.is_search  = false;
-    let data = await this.getUsers(0);
-    this.user_list = data.subscriber // load user list
+    let data = await this.getSubscribers(0);
+    this.subscriber_list = data.subscriber // load subscriber list
 
     this.loaded = true; // remove skeletons
     this.page_no = 0; 
@@ -214,10 +213,10 @@ export class MainViewPage implements OnInit {
       this.changePageColor(page);
       this.loaded = false; //load skeletons
       this.page_change = true;
-      let data = await this.getUsers(page);
+      let data = await this.getSubscribers(page);
       this.page_no = page;
       this.rendered_page_number = this.page_no;
-      this.user_list = data.subscriber // load user list
+      this.subscriber_list = data.subscriber // load subscriber list
       this.changePageColor(page);
 
       
@@ -242,15 +241,13 @@ export class MainViewPage implements OnInit {
     }
   }
   pageExists(page_to_check: number) { // only checks if the next 2 pages exist
-    let page_exists = this.user_per_page * (page_to_check) < parseInt(this.selected_condition.totals) ? true : false; // check for page if exists
+    let page_exists = this.subscriber_per_page * (page_to_check) < parseInt(this.selected_condition.totals) ? true : false; // check for page if exists
     return page_exists;
   }
 
   navigateToPage(page_name: any){
-    console.log('should_navigatenavigate');
     let page = '/' + page_name;
     this.router.navigate([page]);
-
   }
 
   //
@@ -271,8 +268,8 @@ export class MainViewPage implements OnInit {
 
       .addElement(root.querySelector('.modal-wrapper')!)
       .keyframes([
-        { offset: 0, opacity: '0.99', transform: 'translate(100%,0)' },
-        { offset: 1, opacity: '0.99', transform: 'translate(15%,0)', width: '85%' },
+        { offset: 0, opacity: '0.99', transform: 'translate(100%,0)'},
+        { offset: 1, opacity: '0.99', transform: 'translate(15%,0)'},
       ]);
 
     return this.animationCtrl
@@ -282,30 +279,40 @@ export class MainViewPage implements OnInit {
       .duration(200)
       .addAnimation([backdropAnimation, wrapperAnimation]);
   };
+  
 
   leaveAnimation = (baseEl: HTMLElement) => {
     return this.enterAnimation(baseEl).direction('reverse');
   };
 
-  async userMenu(user: any){
-    const modal = await this.modalCtrl.  create({
-      component:  UserPopupComponent,
-      componentProps: {
-        user : user
-      },
-      animated: true,
-      enterAnimation: this.enterAnimation,
-      leaveAnimation: this.leaveAnimation,
+  async subscriberMenu(subscriber: any){
+    if(!this.subscriber_modal_open){
 
-    });
-    modal.present();
+      const modal = await this.modalCtrl.create({
+        component:  SubscriberPopupComponent,
+        componentProps: {
+          subscriber : subscriber
+        },
+        cssClass: 'popup',
+        animated: true,
+        enterAnimation: this.enterAnimation,
+        leaveAnimation: this.leaveAnimation,
+        
+      });
+      modal.present();
+      this.subscriber_modal_open = true;
+      modal.onDidDismiss().then(()=>{
+        this.subscriber_modal_open = false;
+        
+      })
+    }
   }
     
   async filterPopup(){
     const modal = await this.modalCtrl.  create({
       component:  FilterPopupComponent,
       animated: true,
-      cssClass: 'filter-popup',
+      cssClass: 'popup',
       enterAnimation: this.enterAnimation,
       leaveAnimation: this.leaveAnimation,
 
@@ -316,11 +323,11 @@ export class MainViewPage implements OnInit {
   async refreshSubscribers(){
     this.conditions_loaded = false; //for animation
     this.getConditions();
-    this.user_list = null; // reset user list 
+    this.subscriber_list = null; // reset subscriber list 
     this.page_change = false; // reload pagination numbers
     this.loaded = false; // load skeletons
-    let data = await this.getUsers(0);
-    this.user_list = data.subscriber // load user list
+    let data = await this.getSubscribers(0);
+    this.subscriber_list = data.subscriber // load subscriber list
     
     this.loaded = true; // remove skeletons
     this.page_no = 0; 
@@ -329,23 +336,18 @@ export class MainViewPage implements OnInit {
   }
 
 
-  async searchUsers(e: any){
-    console.log()
-    
-    console.log('2');
-    
+  async searchSubscribers(e: any){
     this.is_search = true;
     this.page_no = 0;
     this.rendered_page_number = 0;
     this.search_value = e.target.value;
     this.loaded = this.page_change = false; // show skeleton
     
-    let data = await this.getUsers(0);
-    this.user_list = data.subscriber // load user list
+    let data = await this.getSubscribers(0);
+    this.subscriber_list = data.subscriber // load subscriber list
     
     this.loaded = this.page_change = true; // remove skeleton
     this.debounce_duration = 1000;
-    console.log('here3');
     
   }
 
@@ -369,12 +371,11 @@ export class MainViewPage implements OnInit {
   }
   clearSearch(){
     this.search_value = ''
-    console.log('cleared');
     
   }
 
-  async getFilteredUsers(filters : any){
-    let url = this.getUsers();
+  async getFilteredSubscribers(filters : any){
+    let url = this.getSubscribers();
   }
 
   ngOnInit() {
@@ -389,7 +390,7 @@ export class MainViewPage implements OnInit {
       await this.initData().then((data) => {
         this.loaded = true;
       })
-
+      
     });
 
 

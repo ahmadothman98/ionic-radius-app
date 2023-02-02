@@ -1,63 +1,81 @@
 <ion-list>
   <ion-item>
     <ion-label>
-      By name:
+      Name:
     </ion-label>
-    <ion-input [(ngModel)]="filters.name">
+    <ion-input [(ngModel)]="filters.name" #name_input >
 
     </ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label>
-      By username:
+      Username:
     </ion-label>
-    <ion-input [(ngModel)]="filters.username">
-      
+    <ion-input [(ngModel)]="filters.username" >
+
     </ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label>
-      By address:
+      Address:
     </ion-label>
-    <ion-input [(ngModel)]="filters.address">
-      
+    <ion-input [(ngModel)]="filters.address" >
+
     </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Category 1:</ion-label>
+    <ion-select  [(ngModel)]="filters.category1">
+      <ion-select-option value="categ1.1">1.1</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Category 2:</ion-label>
+    <ion-select [(ngModel)]="filters.category2">
+      <ion-select-option value="categ1.1">2.1</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Services:</ion-label>
+    <ion-select [(ngModel)]="filters.service">
+      <ion-select-option value="service1">service1</ion-select-option>
+    </ion-select>
   </ion-item>
 
   <ion-item>
     <ion-label>
-      By category:
+      Balance:
     </ion-label>
-    <ion-input [(ngModel)]="filters.category">
-      
+    <ion-input [(ngModel)]="filters.balance">
     </ion-input>
   </ion-item>
 
+
+
   <ion-item>
-    <ion-label>
-      By speed:
-    </ion-label>
-    <ion-input [(ngModel)]="filters.speed">
-      
-    </ion-input>
+    <ion-label>Expiry Date:</ion-label>
+    <ion-input value="{{ filters.expiry_date | date: 'dd.MM.yyyy' }}" id="date" class="ion-text-end"></ion-input>
+    <ion-popover trigger="date">
+      <ng-template>
+        <ion-datetime presentation="date" [(ngModel)]="filters.expiry_date"></ion-datetime>
+      </ng-template>
+    </ion-popover>
   </ion-item>
 
   <ion-item>
-    <ion-label>
-      By consumption:
-    </ion-label>
-    <ion-input [(ngModel)]="filters.consumption">
-      
-    </ion-input>
-  </ion-item>
-  
-  <ion-item>
-    <ion-button color="primary" (click)="filter()">
-      <ion-icon name="filter"></ion-icon>
-      <ion-label>Filter</ion-label>
-    </ion-button>
+    <ion-label>Enabled:</ion-label>
+    <ion-select [(ngModel)]="filters.enabled">
+      <ion-select-option value="yes">Yes</ion-select-option>
+      <ion-select-option value="no">No</ion-select-option>
+    </ion-select>
   </ion-item>
 
+
+  <ion-button class="filter-button" color="primary" (click)="filter()">
+    <ion-label>Search</ion-label>
+  </ion-button>
 </ion-list>

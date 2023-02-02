@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { StatusBar , Style} from '@capacitor/status-bar';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonItemSliding, IonList } from '@ionic/angular';
 import { CapacitorConfig } from '@capacitor/cli';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { ApiService } from 'src/app/services/api/api.service';
@@ -14,6 +14,9 @@ import { ApiService } from 'src/app/services/api/api.service';
 
 export class LoginPage implements OnInit {
   @ViewChild('modal') modal : any;
+  @ViewChild('sliding_list') sliding_list: IonList;
+
+  
   config: CapacitorConfig = {
     plugins: {
       Keyboard: {
@@ -86,12 +89,9 @@ export class LoginPage implements OnInit {
       }
       else if(status === 200 && mystatus === "Ok"){
         this.responseData = response.data;
-        console.log(this.responseData);
         Object.assign(this.responseData,{'jwt': (response.headers['Authorization'] ? response.headers['Authorization'] : (response.headers['authorization'] ? response.headers['authorization'] : '' ))});
-        Object.assign(this.responseData,{'user_account': this.user});
-        console.log(response );
+        Object.assign(this.responseData,{'subscriber_account': this.user});
       
-        console.log(response.headers);
       this.storage.set("data", this.responseData).then(()=>{
         
         this.router.navigate(['/main-view'], {replaceUrl: true});
@@ -122,16 +122,26 @@ export class LoginPage implements OnInit {
       }
       
       else if(this.role === "edit"){
-        this.accounts.splice(this.edit_account_index,1,new_account);
-        this.storage.set('accounts',this.accounts).then(() => {
-          this.modal.dismiss();
-        })
+        
+        this.modal.dismiss();
+        setTimeout(() => {
+
+          this.sliding_list.closeSlidingItems();
+        },200)
+        setTimeout(() => {
+          
+          this.accounts.splice(this.edit_account_index,1,new_account);
+          this.storage.set('accounts',this.accounts).then(() => {
+          })
+        }, 500);
+
       }
     }
   }
 
   //
-  async removeAccount(index: number, account_slide_item : any){
+  async removeAccount(index: number){
+
     const alert = await this.alertController.create(
       {
         header: 'Remove ' + this.accounts[index].username + '?',
@@ -158,14 +168,17 @@ export class LoginPage implements OnInit {
       })
     }
 
-   
     if(role === 'cancel' || role === 'backdrop'){
-      account_slide_item.close();
+      this.sliding_list.closeSlidingItems();
     }
+
+
 
   }
 
   editAccount(index: number){
+    
+
     this.modal_title = 'Edit Account';
     this.role = 'edit';
     this.edit_account_index = index;
@@ -193,7 +206,10 @@ export class LoginPage implements OnInit {
     this.role = 'add';
     this.modal_title = 'Add Account';
     this.server_index = -1;
+    setTimeout(() => {
 
+      this.sliding_list.closeSlidingItems();
+    },50)
   }
   //@ts-ignore
   initLoginData(index){
@@ -213,7 +229,6 @@ export class LoginPage implements OnInit {
 
     const response = await this.apiService.post(url, this.headers)
     this.servers = JSON.parse(response.data).server_list;
-    console.log(this.servers);
   }
 
   ngOnInit() {

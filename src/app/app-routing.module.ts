@@ -51,6 +51,15 @@ const routes: Routes = [
     loadChildren: () => import('./pages/menu-pages/category/category.module').then( m => m.CategoryPageModule)
   },
 
+  {
+    path: 'subscriber-details',
+    loadChildren: () => import('./pages/subscriber-details/subscriber-details.module').then( m => m.SubscriberDetailsPageModule)
+  },
+  {
+    path: 'add-edit-subscriber',
+    loadChildren: () => import('./pages/add-edit-subscriber/add-edit-subscriber.module').then( m => m.AddEditSubscriberPageModule)
+  },
+
 
 ];
 

@@ -1,0 +1,371 @@
+<ion-header>
+  <ion-toolbar color="primary">
+
+    <ion-title *ngIf="subscriber != null">{{subscriber.app_subscriber_username}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button>
+      </ion-back-button>
+    </ion-buttons>
+    <ion-buttons *ngIf="subscriber != null" slot="end">
+      <ion-icon [ngClass]="activeCSS" [class]="active_grace_icon"></ion-icon>
+      <ion-icon [ngClass]="onlineCSS" class="online_octa"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="background">
+
+    <ion-grid *ngIf="!subscriber" class="main_container">
+      <ion-row *ngFor="let i of skeleton_items" class="item_container">
+        <ion-col class="item_label">
+          <ion-skeleton-text [animated]="true" style="width: 50%; height: 20%;"></ion-skeleton-text>
+
+        </ion-col>
+        <ion-col class="item_input">
+          <ion-skeleton-text [animated]="true" style="width: 80%; height: 20%;"></ion-skeleton-text>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid *ngIf="subscriber" class="main_container">
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Full Name
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_name }}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Username
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_username }}
+          <ion-buttons item-end style="margin-left: auto;">
+            <ion-button (click)="copy('username');" style="background-color: transparent;">
+              <ion-icon class="copy_octa" style=" color: #2f4040;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Password
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_password }}
+          <ion-buttons item-end style="margin-left: auto;">
+            <ion-button (click)="copy('pw');" style="background-color: transparent;">
+              <ion-icon class="copy_octa" style=" color: #2f4040;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          App Password
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_login_password }}
+          <ion-buttons item-end style="margin-left: auto;">
+            <ion-button (click)="copy('app_pw');" style="background-color: transparent;">
+              <ion-icon class="copy_octa" style="color: #2f4040;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Email
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_email }}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Address
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_address }}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Node
+        </ion-col>
+        <ion-col class="item_input">
+          <span *ngIf="!is_map">LOCKED</span><span *ngIf="is_map">{{ subscriber.app_node_name }}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Phone
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_phone }}
+          <ion-buttons item-end style="margin-left: auto;">
+            <ion-button (click)="call_number();" style="padding-right: 10px; background-color: transparent;">
+              <ion-icon name="call" style="color: #34B7F1;"></ion-icon>
+            </ion-button>
+            <ion-button (click)="copy('phone');" style="background-color: transparent;">
+              <ion-icon class="copy_octa" style="color: #2f4040;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Mobile
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_mobile_pfx }}&nbsp;{{ subscriber.app_subscriber_mobile }}
+          <ion-buttons item-end style="margin-left: auto;">
+            <ion-button (click)="call_number();" style="padding-right: 10px; background-color: transparent;">
+              <ion-icon name="call" style="color: #34B7F1;"></ion-icon>
+            </ion-button>
+            <ion-button (click)="copy('mobile');" style="padding-right: 10px; background-color: transparent;">
+              <ion-icon class="copy_octa" style="color: #2f4040;"></ion-icon>
+            </ion-button>
+            <ion-button (click)="call_whatsapp();" style="background-color: transparent;">
+              <ion-icon name="logo-whatsapp" style="color: #25D366;"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Account Name
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.account_name }}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Services
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_service_name }}
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="subscriber.app_subscriber_last_login != null" class="item_container">
+        <ion-col class="item_label">
+          Last Login
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_last_login }}
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="subscriber.app_subscriber_last_logout != null" class="item_container">
+        <ion-col class="item_label">
+          Last logout
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_last_logout }}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          MAC address
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_mac }}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Router Model
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_macvender }}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Category
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_category_name }}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Framed IP
+        </ion-col>
+        <ion-col class="item_input">
+          <a href="http://{{ subscriber.app_subscriber_framed_ip }}:8080">{{ subscriber.app_subscriber_framed_ip }}</a>
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Expiry date
+        </ion-col>
+        <ion-col class="item_input">
+          {{ subscriber.app_subscriber_newer_expiry_date }}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Balance
+        </ion-col>
+        <ion-col class="item_input">
+          <span *ngIf="!is_account"><b>LOCKED</b></span>
+          <span *ngIf="data.is_account">{{ data.currency_sign }}&nbsp;&nbsp;{{ subscriber.app_subscriber_balance_val |
+            number: '1.2-2' }}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Speed
+        </ion-col>
+        <ion-col *ngIf="speed" class="item_input">
+          {{ speed }}
+        </ion-col>
+        <ion-col *ngIf="!speed" class="item_input">
+          <ion-skeleton-text [animated]="true" style="width: 80%; height: 20%;"></ion-skeleton-text>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+
+
+
+
+    <div *ngIf="!consumption">
+      
+      <div *ngFor="let c of skeleton_items2"  class="consumption_card">
+        <div class="spacer"></div>
+        <ion-label>
+          <ion-skeleton-text [animated]="true" style="width: 20%;"></ion-skeleton-text>
+        </ion-label>
+        <div style="height: 2.4vh;">
+          <ion-skeleton-text [animated]="true"style="height: 100%;" ></ion-skeleton-text>
+        </div>
+        <div style="height: 2.4vh;">
+          <ion-skeleton-text [animated]="true"style="height: 100%;" ></ion-skeleton-text>
+        </div>
+        <div style="height: 2.4vh;">
+          <ion-skeleton-text [animated]="true"style="height: 100%;" ></ion-skeleton-text>
+        </div>
+        <ion-row class="details">
+          <ion-col>
+            <ion-skeleton-text [animated]="true" ></ion-skeleton-text>
+          </ion-col>
+          <ion-col>
+            <ion-skeleton-text [animated]="true" ></ion-skeleton-text>
+          </ion-col>
+        </ion-row>
+        <div class="spacer"></div>
+      </div>
+      
+    </div>
+
+
+    <div *ngFor="let c of consumption" class="consumption_card">
+      <div class="spacer"></div>
+      <ion-label><b style="text-transform: capitalize;">{{ c.name }}</b></ion-label>
+      <div class="{{c.upload.class}}">
+        <span class="text_span" [style.width]="c.upload.width"></span>
+        <div class="bar_text">
+          Upload: {{ c.upload.consumption }} / {{ c.upload.limit }}
+        </div>
+      </div>
+      <div class="{{c.download.class}}">
+        <span class="text_span" [style.width]="c.download.width"></span>
+        <div class="bar_text">
+          Download: {{ c.download.consumption }} / {{ c.download.limit }}
+        </div>
+      </div>
+      <div class="{{c.combined.class}}">
+        <span class="text_span" [style.width]="c.combined.width"></span>
+        <div class="bar_text">
+          Combined: {{ c.combined.consumption }} / {{ c.combined.limit }}
+        </div>
+      </div>
+      <ion-row class="details">
+        <ion-col>
+          FallBack: {{ c.fallback }}
+        </ion-col>
+        <ion-col>
+          Discount: {{ c.discount }}
+        </ion-col>
+      </ion-row>
+      <div class="spacer"></div>
+    </div>
+
+
+
+
+    <!-- <div class="spacer"></div> -->
+
+
+  </div>
+  <!-- <div *ngIf="dealer != null">
+    <ion-grid class="main_container">
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Name (code)
+        </ion-col>
+        <ion-col class="item_input">
+          {{ dealer.app_dealer_name }}&nbsp;&nbsp;({{ dealer.app_dealer_code }})
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Mobile
+        </ion-col>
+        <ion-col class="item_input">
+          {{ dealer.app_dealer_mobile }}
+        </ion-col>
+        <ion-col class="item_input">
+          {{ app_subscriber_mobile_pfx }}&nbsp;{{ app_subscriber_mobile }}
+          <ion-buttons item-end style="margin-left: auto;">
+            <button (click)="call_number_d();" style="background-color: transparent;">
+              <ion-icon button name="call" style="padding-right: 3vw; color: #34B7F1;"></ion-icon>
+            </button>
+            <button (click)="call_whatsapp_d();" style="background-color: transparent;">
+              <ion-icon button name="logo-whatsapp" style=" color: #25D366;"></ion-icon>
+            </button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Account Name
+        </ion-col>
+        <ion-col class="item_input">
+          {{ dealer.app_account_name }}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Subscribers
+        </ion-col>
+        <ion-col class="item_input">
+          <span style="color:#30a7aa">{{ dealer.active_subs }}</span>&nbsp;/&nbsp;{{ dealer.total_subs }}&nbsp;&nbsp;subs.
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Balance
+        </ion-col>
+        <ion-col class="item_input">
+          {{ dealer.currency_code }}&nbsp;{{ dealer.app_account_balance | number:'1.2-2'}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="item_container">
+        <ion-col class="item_label">
+          Wallet
+        </ion-col>
+        <ion-col class="item_input">
+          {{ dealer.currency_code }}&nbsp;{{ dealer.wallet | number:'1.2-2'}}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div> -->
+</ion-content>
