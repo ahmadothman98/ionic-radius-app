@@ -225,7 +225,8 @@ export class LoginPage implements OnInit {
   }
 
   async initServerList(){
-    let url = 'https://octaradius.com/octaradius/api/get_server_list.php';
+    let url = 'http://192.168.87.114/octaradius/api/get_server_list.php';
+    // let url = 'https://octaradius.com/octaradius/api/get_server_list.php';
 
     const response = await this.apiService.post(url, this.headers)
     this.servers = JSON.parse(response.data).server_list;

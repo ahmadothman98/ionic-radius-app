@@ -1,0 +1,181 @@
+ion-list {
+    margin: 0 !important;
+}
+
+.mobile_prfx .select-icon {
+    display: none !important;
+    text-align: center;
+}
+
+.select-icon {
+    background: url('../../../assets/icon/more_arrow.png');
+    background-size: cover;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+// .select-icon {
+//     width: 18px;
+//     height: 18px;
+// }
+.select-icon .select-icon-inner {
+    border: none !important;
+}
+
+.select {
+    max-width: 100% !important;
+    // background-color: #f2f2f2;
+    padding: 5px 0px 5px 10px;
+    width: 100%;
+}
+
+.disabled {
+    color: #979f9f;
+}
+
+.r {
+    flex-flow: nowrap;
+    width: 90vw;
+    height: 6vh;
+    min-height: 40px;
+    padding-bottom: 0.5vh;
+}
+
+.completer-input::placeholder {
+    color: #979f9f;
+}
+
+.completer-dropdown {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-width: 100% !important;
+    max-height: 50vh !important;
+    margin: 0px !important;
+    border-color: #bbe1e1 !important;
+    border-radius: 0px 0px 5px 5px !important;
+    border-top: 0px !important;
+    box-shadow: 0px 5px 10px 0px rgba(23, 129, 129, 0.1);
+}
+
+.completer-dropdown-holder {
+    z-index: 9999;
+}
+
+.completer-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 5px 10px 5px 10px;
+}
+
+.completer-selected-row {
+    background-color: rgba(187, 225, 225, 0.3) !important;
+}
+
+.completer-row {
+    color: #2f4040 !important;
+    width: 100% !important;
+}
+
+.completer-row-wrapper {
+    border-bottom: 1px solid #bbe1e1;
+}
+
+.completer-row-wrapper:last-child {
+    border-bottom: 0px !important;
+}
+
+.text-input {
+    margin: 0px !important;
+    padding: 5px 10px 5px 10px;
+}
+
+.footer .toolbar-background {
+    padding: 16px;
+    border: 0px;
+    background-color: transparent;
+}
+
+.main_container {
+    padding: 35px 0px !important;
+    // padding: 0px !important;
+    // background-color: white !important;
+}
+
+.item_container,
+.item_container:last-child,
+.item-block:last-child {
+    border-top: 1px solid #bbe1e1 !important;
+    background-color: white !important;
+    height: 50px !important;
+}
+
+.item_label {
+    font-weight: 500;
+    // font-size: 16px;
+    font-size: 14px;
+    color: #2f4040;
+    min-width: 110px !important;
+    max-width: 110px !important;
+    margin-left: 10px !important;
+    display: flex;
+    align-items: center;
+    // justify-content: center;
+}
+
+.select-text {
+    white-space: normal !important;
+    color: #979f9f;
+}
+
+.select_arrow {
+    font-size: 32px;
+    color: #2f4040;
+}
+
+.centralize {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+ion-input,
+.item_input {
+    font-weight: 400;
+    color: #979f9f;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    height: auto;
+    overflow-x: scroll;
+    // justify-content: center;
+}
+
+.item-block:last-child,
+.item_container:last-child {
+    border-bottom: 1px solid #bbe1e1 !important;
+}
+
+.toolbar-background {
+    background-color: #30a7aa !important;
+    border: 0px !important;
+}
+
+.back-button,
+.toolbar-title {
+    color: white !important;
+}
+
+.scroll-content {
+    background-color: #eaf4f4 !important;
+}
+
+.toggle-checked .toggle-inner {
+    background: url('../../../assets/icon/check-white.svg');
+    background-repeat: no-repeat;
+    background-size: 80%;
+    background-position: center;
+}
+.toggle::part(track){
+    --background-checked: var(--ion-color-primary-border)
+}

@@ -142,13 +142,14 @@ export class SubscriberDetailsPage implements OnInit {
   }
 
 
-  ngOnInit() {
+  async ngOnInit() {
 
-    this.storage.get('data').then(async (data) => {
+    await this.storage.get('data').then(async (data) => {
       this.data = data;
       this.headers = this.apiService.getHeaders(data.jwt)
       this.is_account = this.data.is_account;
       this.is_map = data.is_map;
+    })
       let subscriber_response = await this.getSubscriberDetails();
       this.subscriber = subscriber_response.subscriber;
 
@@ -172,7 +173,7 @@ export class SubscriberDetailsPage implements OnInit {
 
 
 
-    })
+    
 
   }
 }

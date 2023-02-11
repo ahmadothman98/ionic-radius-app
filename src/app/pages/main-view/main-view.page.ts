@@ -16,13 +16,18 @@ import { FilterPopupComponent } from 'src/app/components/filter-popup/filter-pop
 })
 
 export class MainViewPage implements OnInit {
+addSubscriber() {
+  this.router.navigate(['/add-edit-subscriber' , {new_subscriber : true}]);
+    return;
+
+}
 
   @ViewChild('content') content: IonContent;
   @ViewChild('searchBar') searchBar : IonSearchbar;
 
   token: any;
   data: any;
-
+  ripple = false;
   page_no: number = 0;
   subscriber_list: any;
   subscribers_list_title: string = "Subscribers List";
@@ -299,13 +304,15 @@ export class MainViewPage implements OnInit {
         leaveAnimation: this.leaveAnimation,
         
       });
-      modal.present();
+      await modal.present();
       this.subscriber_modal_open = true;
-      modal.onDidDismiss().then(()=>{
+      await modal.onDidDismiss().then(()=>{
         this.subscriber_modal_open = false;
         
       })
+      
     }
+    this.ripple =  false;
   }
     
   async filterPopup(){
@@ -379,6 +386,11 @@ export class MainViewPage implements OnInit {
   }
 
   ngOnInit() {
+    this.route.params.subscribe(async params => {
+      
+      await params['refresh'] === 'true' ? this.refreshSubscribers() : null;//true or false
+      
+    })
     this.storage.get('data').then(async (data) => {
       this.data = data;
 

@@ -48,7 +48,7 @@ export class SubscriberPopupComponent implements OnInit {
       return;
     }
     else if(option === 'edit_subscriber'){
-      this.router.navigate(['/add-edit-subscriber', { subscriber_id : this.subscriber.app_subscriber_id}]);
+      this.router.navigate(['/add-edit-subscriber', { new_subscriber : false, subscriber_id : this.subscriber.app_subscriber_id}]);
       return;
     }
 

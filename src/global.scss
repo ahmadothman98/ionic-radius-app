@@ -134,3 +134,99 @@ ion-icon {
     }
 
 }
+
+
+
+ion-toast.success::part(container) {
+    background-color: #4cb051;
+    // background-color: #75CF0F;
+    border-radius: 0px !important;
+    text-align: center;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    // border: 1px solid #30a7aa;
+    // transform: translateY(-10px) !important;
+}
+ion-toast.success::part(message), ion-toast.info::part(message), ion-toast.error::part(message), ion-toast.warning::part(message) {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+}
+ion-toast.info::part(container) {
+    background-color: #2196f3;
+    // background-color: #35C4FC;
+    border-radius: 0px !important;
+    text-align: center;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    // border: 1px solid #30a7aa;
+    // transform: translateY(-10px) !important;
+}
+// ion-toast.info .toast-message {
+//     color: #eaf0f4;
+//     font-size: 1.5rem;
+// }
+ion-toast.error::part(container){
+    // background-color: #aa3030;
+    background-color: #F33951;
+    border-radius: 0px !important;
+    text-align: center;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    // border: 1px solid #30a7aa;
+    // transform: translateY(-10px) !important;
+}
+// ion-toast.error .toast-message {
+//     color: #f4eaea;
+//     font-size: 1.5rem;
+// }
+ion-toast.warning::part(container){
+    // background-color: #AA7C30;
+    background-color: #FFB70A;
+    border-radius: 0px !important;
+    text-align: center;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    // border: 1px solid #30a7aa;
+    // transform: translateY(-10px) !important;
+}
+// ion-toast.warning .toast-message {
+//     color: #f4f0ea;
+//     font-size: 1.5rem;
+// }
+ion-toast.online::part(container){
+    background-color: #109D58;
+    border-radius: 0px !important;
+    text-align: center;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    // border: 1px solid #30a7aa;
+    // transform: translateY(-10px) !important;
+}
+ion-toast.online::part(message) {
+    color: white;
+    font-size: 1rem;
+    padding: 3px;
+    // padding-top: 0.5vh;
+}
+ion-toast.offline::part(container) {
+    background-color: black;
+    border-radius: 0px !important;
+    text-align: center;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    // border: 1px solid #30a7aa;
+    // transform: translateY(-10px) !important;
+}
+ion-toast.offline::part(message){
+    color: white;
+    font-size: 1rem;
+    padding: 3px;
+    // padding-top: 0.5vh;
+}
