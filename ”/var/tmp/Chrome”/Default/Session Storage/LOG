@@ -1,3 +1,6 @@
-2023/01/27-11:14:21.373 3 Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Session Storage/MANIFEST-000001
-2023/01/27-11:14:21.374 3 Recovering log #4
-2023/01/27-11:14:21.375 3 Reusing old log /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Session Storage/000004.log 
+2023/02/15-15:57:11.164 5 Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Session Storage/MANIFEST-000001
+2023/02/15-15:57:11.165 5 Recovering log #4
+2023/02/15-15:57:11.172 5 Reusing old log /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Session Storage/000004.log 
+2023/02/15-15:58:49.221 5 Level-0 table #8: started
+2023/02/15-15:58:49.226 5 Level-0 table #8: 19902 bytes OK
+2023/02/15-15:58:49.232 5 Delete type=0 #4

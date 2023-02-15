@@ -2,6 +2,21 @@ ion-list {
     margin: 0 !important;
 }
 
+.mobile_prfx {
+    display: flex;
+}
+
+.mobile_prfx span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile_prfx ion-input {
+    --padding-start: none !important;
+    --padding-end: none !important;
+}
+
 .mobile_prfx .select-icon {
     display: none !important;
     text-align: center;
@@ -41,7 +56,7 @@ ion-list {
     padding-bottom: 0.5vh;
 }
 
-.completer-input::placeholder {
+input.completer-input::placeholder {
     color: #979f9f;
 }
 
@@ -58,7 +73,7 @@ ion-list {
 }
 
 .completer-dropdown-holder {
-    z-index: 9999;
+    z-index: 9999 !important;
 }
 
 .completer-input {
@@ -139,8 +154,51 @@ ion-list {
     justify-content: center;
 }
 
+.node-list-container {
+    background-color: white !important;
+    // border: 1px solid #30a7aa;
+    border-top: none !important;
+    position: absolute;
+    z-index: 9999;
+    max-height: 200px;
+    height: auto;
+    min-width: 90%;
+    max-width: calc(100% - 2px);
+    width: auto;
+    overflow-y: scroll;
+    top: 45px;
+    padding-top: 10px;
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
+}
+
+.node-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px;
+}
+
+.node-list div {
+    border-bottom: 1px solid rgba(150, 150, 150, 0.3);
+    padding: 0 5px 10px 5px;
+}
+
+.seperator {
+    width: 100%;
+    height: 2px;
+    background-color: #999999;
+    opacity: 10%;
+
+}
+
 ion-input,
-.item_input {
+.item_input,
+.completer-input {
     font-weight: 400;
     color: #979f9f;
     display: flex;
@@ -150,6 +208,7 @@ ion-input,
     overflow-x: scroll;
     // justify-content: center;
 }
+
 
 .item-block:last-child,
 .item_container:last-child {
@@ -170,12 +229,28 @@ ion-input,
     background-color: #eaf4f4 !important;
 }
 
-.toggle-checked .toggle-inner {
-    background: url('../../../assets/icon/check-white.svg');
+// .toggle-checked .toggle-inner {
+//     background: url('../../../assets/icon/check-white.svg');
+//     background-repeat: no-repeat;
+//     background-size: 80%;
+//     background-position: center;
+// }
+.toggle {
+    width: 100%;
+    padding-right: calc(100% - 50px);
+    --handle-background-checked: #30a7aa;
+
+}
+
+.toggle::part(handle) {
+    content: url('../../../assets/icon/check-white.svg');
     background-repeat: no-repeat;
     background-size: 80%;
     background-position: center;
+
+
 }
-.toggle::part(track){
-    --background-checked: var(--ion-color-primary-border)
+
+.toggle::part(track) {
+    --background-checked: var(--ion-color-primary-border);
 }

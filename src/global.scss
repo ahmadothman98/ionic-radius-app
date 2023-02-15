@@ -230,3 +230,11 @@ ion-toast.offline::part(message){
     padding: 3px;
     // padding-top: 0.5vh;
 }
+.cdk-overlay-container{
+   position: relative;
+}
+
+.cdk-overlay-pane{
+    background-color: white;
+    position: fixed;
+}

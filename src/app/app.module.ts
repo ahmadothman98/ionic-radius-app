@@ -6,7 +6,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-
+import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { AuthService } from './guards/auth/auth.service'
 import { AuthGuard } from './guards/auth/autfh.guard'
@@ -19,10 +19,26 @@ import { FilterPopupComponent } from './components/filter-popup/filter-popup.com
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { CallNumber } from '@awesome-cordova-plugins/call-number/ngx';
 import { Ng2CompleterModule } from "ng2-completer";
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {  MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [AppComponent, SubscriberPopupComponent, FilterPopupComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,  IonicStorageModule.forRoot(), NgxPaginationModule, FormsModule],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(), 
+    AppRoutingModule,  
+    IonicStorageModule.forRoot(), 
+    NgxPaginationModule, 
+    FormsModule, 
+    HttpClientModule, 
+    MatAutocompleteModule,
+    BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatInputModule
+  ],
 
   providers: [Ng2CompleterModule,CallNumber,Clipboard,{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, AuthService, AuthGuard, LoginGuard],
   bootstrap: [AppComponent],

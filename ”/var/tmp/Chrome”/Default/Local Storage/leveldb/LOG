@@ -1,6 +1,19 @@
-2023/01/27-11:14:00.603 3 Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Local Storage/leveldb/MANIFEST-000001
-2023/01/27-11:14:00.606 3 Recovering log #11
-2023/01/27-11:14:00.620 3 Reusing old log /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Local Storage/leveldb/000011.log 
-2023/01/27-15:20:40.678 13 Level-0 table #15: started
-2023/01/27-15:20:40.682 13 Level-0 table #15: 60107 bytes OK
-2023/01/27-15:20:40.685 13 Delete type=0 #11
+2023/02/15-15:56:37.103 5 Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Local Storage/leveldb/MANIFEST-000001
+2023/02/15-15:56:37.105 5 Recovering log #14
+2023/02/15-15:56:37.139 5 Reusing old log /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Local Storage/leveldb/000014.log 
+2023/02/15-15:59:00.640 7 Level-0 table #18: started
+2023/02/15-15:59:00.652 7 Level-0 table #18: 39063 bytes OK
+2023/02/15-15:59:00.656 7 Delete type=0 #14
+2023/02/15-15:59:00.657 7 Compacting 4@0 + 1@1 files
+2023/02/15-15:59:00.715 7 Generated table #19@0: 60 keys, 2540820 bytes
+2023/02/15-15:59:00.720 7 Generated table #20@0: 66 keys, 47059 bytes
+2023/02/15-15:59:00.720 7 Compacted 4@0 + 1@1 files => 2587879 bytes
+2023/02/15-15:59:00.722 7 compacted to: files[ 0 2 1 0 0 0 0 ]
+2023/02/15-15:59:00.723 7 Delete type=2 #7
+2023/02/15-15:59:00.723 7 Delete type=2 #10
+2023/02/15-15:59:00.723 7 Delete type=2 #18
+2023/02/15-15:59:00.723 7 Delete type=2 #12
+2023/02/15-15:59:00.723 7 Delete type=2 #15
+2023/02/15-15:59:35.866 7 Level-0 table #22: started
+2023/02/15-15:59:35.871 7 Level-0 table #22: 41183 bytes OK
+2023/02/15-15:59:35.874 7 Delete type=0 #17

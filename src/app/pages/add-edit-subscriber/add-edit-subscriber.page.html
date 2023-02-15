@@ -56,10 +56,10 @@
               (ionChange)="onChangeTime($event)" placeholder="Optional" readonly="true"></ion-input>
           </ion-col>
           <ion-col size="1" class="centralize" style="margin-right:5px;">
-            <ion-icon class="shuffle_octa" style="font-size: 24px;" (click)="generate_password();"></ion-icon>
+            <ion-icon class="shuffle_octa" style="font-size: 24px;" (click)="generatePassword();"></ion-icon>
           </ion-col>
           <ion-col size="1" class="centralize">
-            <ion-icon class="copy_octa" style="font-size: 24px;" (click)="copy_password();"></ion-icon>
+            <ion-icon class="copy_octa" style="font-size: 24px;" (click)="copyPassword();"></ion-icon>
           </ion-col>
           <ion-col size="1" class="centralize" style="margin-right:5px;">
             <ion-icon class="close_octa" style="font-size: 24px;" (click)="clear('app_pwd');"></ion-icon>
@@ -83,45 +83,65 @@
           </ion-col>
         </ion-row>
 
-        <ion-row class="item_container" *ngIf="data.is_map == '1' && dropdown.app_node.length > 0">
+        <ion-row class="item_container" *ngIf="data?.is_map == '1' && dropdown.app_node.length > 0">
           <ion-col class="item_label">
             Node
           </ion-col>
-          <ion-col class="item_input">
-            <ng2-completer [(ngModel)]="app_node_name" (openOnFocus)="true" (datasource)="dropdown.app_node" (ngModelChange)="reset_poe();"
-              (minSearchLength)="0" name="node" placeholder="Optional"></ng2-completer>
+          <ion-col class="item_input" style="position: relative; overflow: visible !important;">
+
+            <div>
+              <ion-input [(ngModel)]="app_node.app_node_name" name="app_node_name" type="text" placeholder="Optional"
+                class="completer-input" (ionFocus)="showDataList()" [formControl]="myControl"
+                (ionBlur)="hideDataList()" (ionChange)="filterNodeList($event)">
+              </ion-input>
+            </div>
+            <div *ngIf="node_list_visible" class="node-list-container">
+              <div class="node-list">
+                <div lines="none" *ngFor="let option of filtered_options;" (click)="selectNode($event)">
+                  {{option.app_node_name}}
+                </div>
+              </div>
+            </div>
+
+
+
           </ion-col>
         </ion-row>
-        
+
         <ion-row class="item_container" *ngIf="dropdown.app_country.length > 0">
           <ion-col class="item_label">
             Nationality
           </ion-col>
           <ion-col class="item_input">
 
-            <ion-select interface="action-sheet" *ngIf="new_subscriber" [(ngModel)]="app_country_id" name="app_country_nationality"
-              placeholder="Required" required>
+            <ion-select interface="action-sheet" *ngIf="new_subscriber" [(ngModel)]="app_country_id"
+              name="app_country_nationality" placeholder="Required" required>
               <ion-select-option *ngFor="let country of dropdown.app_country" [value]="country.app_country_id">
                 {{ country.app_country_nationality }}
               </ion-select-option>
-            </ion-select> 
+            </ion-select>
             <ion-icon *ngIf="new_subscriber" class="forword_arrow_octa" class="select_arrow"></ion-icon>
-            <ion-input *ngIf="!new_subscriber" class="disabled" [(ngModel)]="app_country_nationality" type="text" name="country"
-              readonly="true"></ion-input>
+            <ion-input *ngIf="!new_subscriber" class="disabled" [(ngModel)]="app_country_nationality" type="text"
+              name="country" readonly="true"></ion-input>
           </ion-col>
         </ion-row>
-       
+
         <ion-row class="item_container">
           <ion-col class="item_label">
             Mobile
           </ion-col>
           <ion-col class="item_input">
             <ion-col size="3" class="mobile_prfx" style="margin-left:5px;">
-              {{ mobile_prefix_code }}
-           
+              <span>+</span>
+              
+              <ion-input [(ngModel)]="mobile_prefix_code" name="pfx" readonly="true">
+
+              </ion-input>
+
             </ion-col>
             <ion-col>
-              <ion-input [(ngModel)]="app_subscriber_mobile" type="number" name="mobile" placeholder="Required" required>
+              <ion-input [(ngModel)]="app_subscriber_mobile" type="number" name="mobile" placeholder="Required"
+                required>
               </ion-input>
             </ion-col>
           </ion-col>
@@ -146,8 +166,8 @@
                 {{ service.app_service_name }}
               </ion-select-option>
             </ion-select>
-            <ion-input *ngIf="!new_subscriber && !is_expired" class="disabled" [(ngModel)]="app_service_name" type="text"
-              name="service" readonly="true"></ion-input>
+            <ion-input *ngIf="!new_subscriber && !is_expired" class="disabled" [(ngModel)]="app_service_name"
+              type="text" name="service" readonly="true"></ion-input>
           </ion-col>
         </ion-row>
         <ion-row class="item_container">
@@ -164,7 +184,8 @@
             POE?
           </ion-col>
           <ion-col class="item_input">
-            <ion-select interface="action-sheet" [(ngModel)]="app_subscriber_poe" name="app_subscriber_poe" placeholder="Required" required>
+            <ion-select interface="action-sheet" [(ngModel)]="app_subscriber_poe" name="app_subscriber_poe"
+              placeholder="Required" required>
               <ion-select-option *ngFor="let p of poe" [value]="p.name">
                 {{ p.title }}
               </ion-select-option>
@@ -176,7 +197,8 @@
             Parent Account
           </ion-col>
           <ion-col class="item_input">
-            <ion-select interface="action-sheet" [(ngModel)]="app_parent_account_id" name="app_parent_account_name" placeholder="Required" required>
+            <ion-select interface="action-sheet" [(ngModel)]="app_parent_account_id" name="app_parent_account_name"
+              placeholder="Required" required>
               <ion-select-option *ngFor="let account of parent_account" [value]="account.app_account_id">
                 {{ account.app_account_name }}
               </ion-select-option>
@@ -188,7 +210,8 @@
             Payment Method
           </ion-col>
           <ion-col class="item_input">
-            <ion-select interface="action-sheet" [(ngModel)]="app_payment_type_id" name="app_payment_type_id" placeholder="Required" required>
+            <ion-select interface="action-sheet" [(ngModel)]="app_payment_type_id" name="app_payment_type_id"
+              placeholder="Required" required>
               <ion-select-option *ngFor="let p of payment_type" [value]="p.app_payment_type_id">
                 {{ p.app_payment_type_name }}
               </ion-select-option>
@@ -218,7 +241,8 @@
           <ion-col class="item_input">
             <ion-select interface="action-sheet" [(ngModel)]="app_category_1_id" name="app_category_1_name"
               placeholder="Optional">
-              <ion-select-option *ngFor="let category of dropdown.app_category" [value]="category.app_subscriber_category_id">
+              <ion-select-option *ngFor="let category of dropdown.app_category"
+                [value]="category.app_subscriber_category_id">
                 {{ category.app_subscriber_category_name }}
               </ion-select-option>
             </ion-select>
@@ -234,7 +258,8 @@
           <ion-col class="item_input">
             <ion-select interface="action-sheet" [(ngModel)]="app_category_2_id" name="app_category_2_name"
               placeholder="Optional">
-              <ion-select-option *ngFor="let category of dropdown.app_category2" [value]="category.app_subscriber_category_id">
+              <ion-select-option *ngFor="let category of dropdown.app_category2"
+                [value]="category.app_subscriber_category_id">
                 {{ category.app_subscriber_category_name }}
               </ion-select-option>
             </ion-select>
@@ -250,7 +275,8 @@
           <ion-col class="item_input">
             <ion-select interface="action-sheet" [(ngModel)]="app_category_3_id" name="app_category_3_name"
               placeholder="Optional">
-              <ion-select-option *ngFor="let category of dropdown.app_category3" [value]="category.app_subscriber_category_id">
+              <ion-select-option *ngFor="let category of dropdown.app_category3"
+                [value]="category.app_subscriber_category_id">
                 {{ category.app_subscriber_category_name }}
               </ion-select-option>
             </ion-select>

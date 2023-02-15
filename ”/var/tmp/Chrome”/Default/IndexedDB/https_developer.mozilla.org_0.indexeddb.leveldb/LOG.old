@@ -1,6 +1,15 @@
-2022/12/30-17:17:00.629 929a Creating DB /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/IndexedDB/https_developer.mozilla.org_0.indexeddb.leveldb since it was missing.
-2022/12/30-17:17:00.632 929a Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/IndexedDB/https_developer.mozilla.org_0.indexeddb.leveldb/MANIFEST-000001
-2022/12/30-17:19:08.296 8e22 Level-0 table #5: started
-2022/12/30-17:19:08.299 8e22 Level-0 table #5: 9070 bytes OK
-2022/12/30-17:19:08.300 8e22 Delete type=0 #3
-2022/12/30-17:19:08.301 8e22 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2023/02/15-16:45:43.288 27ed Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/IndexedDB/https_developer.mozilla.org_0.indexeddb.leveldb/MANIFEST-000001
+2023/02/15-16:45:43.288 27ed Recovering log #4
+2023/02/15-16:45:43.293 27ed Reusing old log /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/IndexedDB/https_developer.mozilla.org_0.indexeddb.leveldb/000004.log 
+2023/02/15-17:11:32.816 29c1 Level-0 table #8: started
+2023/02/15-17:11:32.818 29c1 Level-0 table #8: 23407 bytes OK
+2023/02/15-17:11:32.820 29c1 Delete type=0 #4
+2023/02/15-17:11:32.820 29c1 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2023/02/15-17:11:32.820 29c1 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x01\x01\x02\x01\x13\x00u\x00s\x00e\x00r\x00L\x00i\x00f\x00e\x00t\x00i\x00m\x00e\x00M\x00e\x00t\x00r\x00i\x00c\x00s' @ 605 : 1
+2023/02/15-17:11:32.820 29c1 Compacting 1@1 + 1@2 files
+2023/02/15-17:11:32.822 29c1 Generated table #9@1: 27 keys, 1509 bytes
+2023/02/15-17:11:32.822 29c1 Compacted 1@1 + 1@2 files => 1509 bytes
+2023/02/15-17:11:32.823 29c1 compacted to: files[ 0 0 1 0 0 0 0 ]
+2023/02/15-17:11:32.823 29c1 Delete type=2 #5
+2023/02/15-17:11:32.823 29c1 Delete type=2 #8
+2023/02/15-17:11:32.823 29c1 Manual compaction at level-1 from '\x00\x01\x01\x02\x01\x13\x00u\x00s\x00e\x00r\x00L\x00i\x00f\x00e\x00t\x00i\x00m\x00e\x00M\x00e\x00t\x00r\x00i\x00c\x00s' @ 605 : 1 .. (end); will stop at (end)

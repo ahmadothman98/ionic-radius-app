@@ -4,6 +4,7 @@ import { ApiService } from 'src/app/services/api/api.service';
 import { StorageService } from 'src/app/services/storage/storage.service';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 import { ToastController } from '@ionic/angular';
+import { FormControl } from '@angular/forms';
 
 
 export interface POE {
@@ -17,6 +18,9 @@ export interface POE {
   styleUrls: ['./add-edit-subscriber.page.scss'],
 })
 export class AddEditSubscriberPage implements OnInit {
+  myControl = new FormControl('');
+  filtered_options: any;
+
   subscriber: any;
 
   dropdown: any = {
@@ -45,17 +49,18 @@ export class AddEditSubscriberPage implements OnInit {
   action: any = 'add';
   app_subscriber_subscription_date: any = new Date().toISOString();
 
+  node_list_visible: boolean = false;
 
   //ngmodels
   app_subscriber_name: any;
-  app_subscriber_username: any;
-  app_subscriber_password: any;
+  app_subscriber_username: any = '';
+  app_subscriber_password: any = '';
   app_subscriber_login_password: any;
   app_subscriber_email: any;
   app_subscriber_address: any;
   app_country_id: any;
   app_country_nationality: any;
-  mobile_prefix_code: any;
+  mobile_prefix_code = 961;
   app_subscriber_mobile: any;
   app_subscriber_phone: any;
   is_expired: any;
@@ -81,18 +86,27 @@ export class AddEditSubscriberPage implements OnInit {
   app_subscriber_disc_desc: any;
   app_subscriber_add_val: any;
   app_subscriber_add_desc: any;
-  app_node_name: any;
   app_subscriber_disc_curr: any;
   app_subscriber_disc_code_id: null;
   app_subscriber_add_code_id: any;
   app_subscriber_add_curr: null;
   app_currencies: any = [];
   app_collector_name: any;
-  app_node_id: any;
   app_subscriber_mac: any;
+  data_node: any;
+  app_node = {
+    app_node_name: '',
+    app_node_id: '',
+  };
 
 
-  constructor(private apiService: ApiService, private storage: StorageService, private route: ActivatedRoute, private router: Router, private clipboard: Clipboard, private toastCtrl: ToastController) {
+  constructor(
+    private apiService: ApiService,
+    private storage: StorageService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private clipboard: Clipboard,
+    private toastCtrl: ToastController) {
     this.poe.push({ name: 'true', title: 'True' });
     this.poe.push({ name: 'false', title: 'False' });
   }
@@ -110,6 +124,8 @@ export class AddEditSubscriberPage implements OnInit {
     const response = await this.apiService.post(url, this.headers, apiData);
     let res = await JSON.parse(response.data);
     this.dropdown = res;
+    console.log(res);
+
 
     if (this.dropdown.app_currency != null) {
       for (let i = 0; i < this.dropdown.app_currency.length; i++) {
@@ -119,10 +135,10 @@ export class AddEditSubscriberPage implements OnInit {
       }
     }
 
-    console.log(res);
-
+    this.filtered_options = this.dropdown.app_node;
   }
-  generate_password() {
+
+  generatePassword() {
     this.app_subscriber_login_password = '';
     let length = 10;
     let characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -132,35 +148,16 @@ export class AddEditSubscriberPage implements OnInit {
     }
   }
 
-  copy_password() {
+  copyPassword() {
     this.clipboard.copy(this.app_subscriber_login_password);
   }
   onChangeTime(e: any) {
-    // let strLen = this.app_subscriber_password.length;
-    // for (let i = 0; i < strLen; i++) {
-    //   this.app_subscriber_password = this.subscriber.app_subscriber_password.replace(" ", "");
-    // }
-
-    // strLen = this.subscriber.app_subscriber_username.length;
-    // for (let i = 0; i < strLen; i++) {
-    //   this.subscriber.app_subscriber_username = this.subscriber.app_subscriber_username.replace(" ", "");
-    // }
+  //  this.app_subscriber_username.includes(' ') && 
+  //  this.app_subscriber_username.replaceAll(' ','');
+  //  this.app_subscriber_password.includes(' ') && this.app_subscriber_password.replaceAll(' ','');
+   
   }
 
-  async getAddSubscriber() {
-    let url = this.data.subscriber_account.server_link + '/api/action.php';
-
-    let apiData = {
-      "type": "get_add_subscriber",
-      "app_dealer_id": this.data.app_dealer_id,
-    }
-    const response = await this.apiService.post(url, this.headers, apiData);
-    let res = await JSON.parse(response.data);
-    this.parent_account = res.account;
-    this.payment_type = res.payment_type;
-    console.log(res);
-
-  }
 
   clear(type: string) {
     if (type === 'credit_limit') {
@@ -189,6 +186,8 @@ export class AddEditSubscriberPage implements OnInit {
   }
 
   async initSubscriberData() {
+    console.log(this.subscriber);
+
     this.app_subscriber_name = this.subscriber.app_subscriber_name;
     this.app_subscriber_username = this.subscriber.app_subscriber_username;
     this.app_subscriber_password = this.subscriber.app_subscriber_password;
@@ -218,12 +217,13 @@ export class AddEditSubscriberPage implements OnInit {
     this.app_subscriber_disc_desc = this.subscriber.app_subscriber_disc_desc;
     this.app_subscriber_add_val = this.subscriber.app_subscriber_add_val;
     this.app_subscriber_add_desc = this.subscriber.app_subscriber_add_desc;
-    this.app_node_name = this.subscriber.app_node_name;
+    this.app_node.app_node_id = this.subscriber.app_node_id;
+    this.app_node.app_node_name = this.subscriber.app_node_name;
     this.app_subscriber_disc_curr = this.subscriber.app_subscriber_disc_curr;
     this.app_subscriber_disc_code_id = this.subscriber.app_subscriber_disc_code;
     this.app_subscriber_add_code_id = this.subscriber.app_subscriber_add_code;
     this.app_subscriber_add_curr = this.subscriber.app_subscriber_add_curr;
-
+    this.app_subscriber_mac = this.subscriber.app_subscriber_mac;
 
     if (this.subscriber.is_expired == '0') {
       this.is_expired = false;
@@ -232,7 +232,7 @@ export class AddEditSubscriberPage implements OnInit {
     }
 
     if (this.subscriber.app_subscriber_poe === null) {
-      this.subscriber.app_subscriber_poe = this.poe[1].name;
+      this.app_subscriber_poe = this.poe[1].name;
     }
     if (this.subscriber.app_subscriber_mobile_pfx != null) {
       this.mobile_prefix_code = this.subscriber.app_subscriber_mobile_pfx;
@@ -247,7 +247,7 @@ export class AddEditSubscriberPage implements OnInit {
     if (this.subscriber.app_node_id > 0) {
       for (let i = 0; i < this.dropdown.app_node.length; i++) {
         if (this.dropdown.app_node[i].app_node_id === this.subscriber.app_node_id) {
-          this.app_node_name = this.dropdown.app_node[i].app_node_name;
+          this.app_node.app_node_name = this.dropdown.app_node[i].app_node_name;
         }
       }
     }
@@ -319,8 +319,8 @@ export class AddEditSubscriberPage implements OnInit {
 
     let url = this.data.subscriber_account.server_link + '/api/action.php';
     let apiData = {
-      "app_dealer_id": this.data.app_dealer_id,
       "type": "get_add_subscriber",
+      "app_dealer_id": this.data.app_dealer_id,
     }
 
     if (this.data.is_account === '1') {
@@ -329,21 +329,24 @@ export class AddEditSubscriberPage implements OnInit {
       let res = await JSON.parse(response.data);
       this.parent_account = res.account;
       this.payment_type = res.payment_type;
-
-      // this.app_parent_account_id = this.parent_account[0].app_account_id;
     }
-
 
   }
 
   async submit() {
+    if (this.dropdown.app_node != null) {
+      for (let i = 0; i < this.dropdown.app_node.length; i++) {
+        if (this.dropdown.app_node[i].app_node_name === this.app_node.app_node_name) {
+          this.app_node.app_node_id = this.dropdown.app_node[i].app_node_id;
+        }
+      }
+    }
     let url = this.data.subscriber_account.server_link + '/api/action.php';
 
     let apiData = {
       action: this.action,
       user_id: this.data.user_id,
       app_dealer_id: this.data.app_dealer_id,
-      app_node_id: this.app_node_id,
       app_country_id: this.app_country_id,
       app_service_id: this.app_service_id,
       app_collector_id: this.app_collector_id,
@@ -376,6 +379,7 @@ export class AddEditSubscriberPage implements OnInit {
       app_subscriber_credit_limit: this.app_subscriber_credit_limit,
       app_subscriber_credit_limit_code: this.app_subscriber_credit_limit_code,
       app_subscriber_poe: this.app_subscriber_poe,
+      app_node_id: this.app_node.app_node_id,
       app_payment_type_id: this.app_payment_type_id,
       index_id: this.app_parent_account_id,
     };
@@ -394,12 +398,12 @@ export class AddEditSubscriberPage implements OnInit {
   }
 
   async handleResponse(response_data: any) {
-    
+
     if (response_data.type === "success") {
       this.action === "add" ?
         this.toast("User: " + this.app_subscriber_name + " was successfully added!", "bottom", 3000, "success") :
         this.toast("User: " + this.app_subscriber_name + " was successfully edited!", "bottom", 3000, "success");
-        this.router.navigate(['/main-view',{refresh : true}],{replaceUrl: true});//refreshhhh
+      this.router.navigate(['/main-view', { refresh: true }], { replaceUrl: true });//refreshhhh
 
     }
     else {
@@ -418,7 +422,7 @@ export class AddEditSubscriberPage implements OnInit {
   }
 
   reset_poe() {
-    this.subscriber.app_subscriber_poe = null;
+    this.app_subscriber_poe = null;
   }
   changed(ev: any, type: string) {    //if select changed
     // console.log(ev);
@@ -434,57 +438,98 @@ export class AddEditSubscriberPage implements OnInit {
           if (this.dropdown.app_service[i].app_service_id === ev && this.dropdown.app_service[i].app_service_is_auto_recharge === "1") {
             this.app_subscriber_auto_recharge = true;
             this.disable_service = false;
-          } else if (this.dropdown.app_service[i].app_service_id === ev && this.dropdown.app_service[i].app_service_is_auto_recharge === "0") {
+          }
+          else if (this.dropdown.app_service[i].app_service_id === ev && this.dropdown.app_service[i].app_service_is_auto_recharge === "0") {
             this.app_subscriber_auto_recharge = false;
             this.disable_service = true;
           }
         }
       } else if (type === 'discount') {
         for (let i = 0; i < this.dropdown.app_currency.length; i++) {
+
           if (ev === this.dropdown.app_currency[i].app_currency_id) {
             this.app_subscriber_disc_curr = this.dropdown.app_currency[i].app_currency_code;
           }
+
         }
-      } else if (type === 'addition') {
+      }
+      else if (type === 'addition') {
         for (let i = 0; i < this.dropdown.app_currency.length; i++) {
+
           if (ev === this.dropdown.app_currency[i].app_currency_id) {
             this.app_subscriber_disc_curr = this.dropdown.app_currency[i].app_currency_code;
           }
+
         }
       }
     }
   }
 
+  showDataList() { // nodeList show
+    this.node_list_visible = true;
+  }
+  hideDataList() { // nodeList hide
+    setTimeout(() => {
+      // to give time for the click on item before closing
+      this.node_list_visible = false;
+    }, 100);
+  }
+
+  async selectNode(e: any) {
+    this.app_node.app_node_name = await e.target.innerText;
+    this.hideDataList();
+  }
+
+  filterNodeList(e: any) {
+    this.reset_poe();
+    const filterValue = e.target.value.toLowerCase();
+    this.filtered_options = this.dropdown.app_node.filter((option: any) => option.app_node_name.toLowerCase().includes(filterValue));
+
+  }
+
+
+  ////////////////////////////////////////////////////////////////
+
   async ngOnInit() {
-
+    //
     this.route.params.subscribe(async params => {
-
-      this.new_subscriber = await params['new_subscriber'] === 'true' ? true : false;//true or false
+      this.new_subscriber = await params['new_subscriber'] === 'true' ? true : false;
       if (this.new_subscriber) {
         this.action = 'add';
-
       }
       else {
         this.action = 'modify';
       }
       this.subscriber_id = params['subscriber_id'];
-
     })
+    ///
+
+    //
     await this.storage.get('data').then((data: any) => {
       this.data = data
 
       this.headers = this.apiService.getHeaders(data.jwt)
 
     });
-    await this.getDropDownLists();
-    await this.getAddSubscriber();
-    await this.getParent();
+    ///
 
+    //
+    await this.getDropDownLists();
+    ///
+
+    //
+    await this.getParent();
+    ///
+
+    //
     if (!this.new_subscriber) {
       await this.getSubscriber();
       await this.initSubscriberData();
-
     }
+    ///
+
   }
+
+  ////////////////////////////////
 
 }

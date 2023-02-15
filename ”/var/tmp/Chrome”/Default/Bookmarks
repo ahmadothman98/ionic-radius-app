@@ -4,7 +4,7 @@
       "bookmark_bar": {
          "children": [ {
             "date_added": "13318619690275181",
-            "date_last_used": "0",
+            "date_last_used": "13320944030434401",
             "guid": "b0ee3c67-0795-4da5-af1e-c64990a2823c",
             "id": "5",
             "meta_info": {
@@ -15,7 +15,7 @@
             "url": "http://localhost:8100/login"
          }, {
             "date_added": "13318678257284514",
-            "date_last_used": "0",
+            "date_last_used": "13320944949949965",
             "guid": "a1e1654a-413f-4d80-9565-6a5f5d40910e",
             "id": "7",
             "meta_info": {

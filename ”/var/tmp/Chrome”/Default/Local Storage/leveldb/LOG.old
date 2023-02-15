@@ -1,3 +1,6 @@
-2023/01/20-14:46:09.182 3 Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Local Storage/leveldb/MANIFEST-000001
-2023/01/20-14:46:09.183 3 Recovering log #11
-2023/01/20-14:46:09.183 3 Reusing old log /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Local Storage/leveldb/000011.log 
+2023/01/27-11:14:00.603 3 Reusing MANIFEST /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Local Storage/leveldb/MANIFEST-000001
+2023/01/27-11:14:00.606 3 Recovering log #11
+2023/01/27-11:14:00.620 3 Reusing old log /home/rootadmin/ionic/OctaRadius/”/var/tmp/Chrome”/Default/Local Storage/leveldb/000011.log 
+2023/01/27-15:20:40.678 13 Level-0 table #15: started
+2023/01/27-15:20:40.682 13 Level-0 table #15: 60107 bytes OK
+2023/01/27-15:20:40.685 13 Delete type=0 #11
